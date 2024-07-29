@@ -101,45 +101,45 @@ a. SUCCESSFUL RESPONSE CODE: 201
 
 
 # Function to process payments for an array of users
-def process_payments(usernames, amount_to_pay_per_user):
-    for username in usernames:
-        #print(f"Processing payment for user: {username}")
-
-        # Obtain initial access token
-        access_token = obtain_access_token()
-        if access_token != 200:
-            continue
-
-        # Create VRP consent
-        consent_id = create_vrp_consent(access_token, amount_to_pay_per_user)
-        if consent_id != 201:
-            continue
-
-        # Get customer authorization
-        authorization_code = get_customer_authorization(username)
-        if authorization_code != 200:
-            continue
-
-        # Exchange authorization code for VRP access token
-        vrp_access_token = exchange_authorization_code(authorization_code)
-        if vrp_access_token != 200
-            continue
-
-        # Confirm available funds
-        if confirm_available_funds(vrp_access_token) != 201:
-            continue
-
-        # Submit the payment
-        if submit_payment(vrp_access_token) == 201:
-            return True
-            #print(f"Payment successful for user: {username}")
-        else:
-            return False
-            #print(f"Payment failed for user: {username}")
+# def process_payments(usernames, amount_to_pay_per_user):
+#     for username in usernames:
+#         #print(f"Processing payment for user: {username}")
+#
+#         # Obtain initial access token
+#         access_token = obtain_access_token()
+#         if access_token != 200:
+#             continue
+#
+#         # Create VRP consent
+#         consent_id = create_vrp_consent(access_token, amount_to_pay_per_user)
+#         if consent_id != 201:
+#             continue
+#
+#         # Get customer authorization
+#         authorization_code = get_customer_authorization(username)
+#         if authorization_code != 200:
+#             continue
+#
+#         # Exchange authorization code for VRP access token
+#         vrp_access_token = exchange_authorization_code(authorization_code)
+#         if vrp_access_token != 200
+#             continue
+#
+#         # Confirm available funds
+#         if confirm_available_funds(vrp_access_token) != 201:
+#             continue
+#
+#         # Submit the payment
+#         if submit_payment(vrp_access_token) == 201:
+#             return True
+#             #print(f"Payment successful for user: {username}")
+#         else:
+#             return False
+#             #print(f"Payment failed for user: {username}")
 
 
 def holding_page(request):
-    # hold time for 10mins
+    # hold time for 10mins, API gets called for each person
     return
 
 
