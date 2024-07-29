@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from . import forms
-from api import get_access_token, VRP_consent, get_consent, exchange_code_for_token, confirm_funds, submit_payment
+from .api import get_access_token, VRP_consent, get_consent, exchange_code_for_token, confirm_funds, submit_payment
 import re
 from django.core.cache import cache
 from time import sleep
@@ -181,6 +181,7 @@ def process_payments(usernames, amounts):
         results.append(user_result)
 
     return results
+
 
 # # Function to process payments for an array of users
 # def process_payments(usernames, amount_to_pay_per_user):
