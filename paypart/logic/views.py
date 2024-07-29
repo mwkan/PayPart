@@ -18,8 +18,29 @@ from django.http import HttpResponse
 # if not all true, then return fail page
 
 
-def home(request):
-    total_cost = 100
+def start_payment_process(request): #MA
+    #landing page, payment = £2000, asks for how many splitting between & asks user whether they want to split or use custom
     return HttpResponse("Welcome to Paypart")
 
-# Create your views here.
+def choose_split(request):
+    # take the payment amount and split it between number of users
+    return #amount
+
+def choose_custom(request):
+    #taking the custom value from the input
+    return #amount
+
+def get_username(request):
+    return #username
+
+def process_payments(request): #MWK
+    #calling all the stages of the API and iterate through each username to do it for each person
+    return #true or false
+
+def holding_page(request):
+    #hold time for 10mins
+    return
+
+def success_page(request):
+    return
+
