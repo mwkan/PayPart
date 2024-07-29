@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from . import forms
 from api import get_access_token, VRP_consent, get_consent, exchange_code_for_token, confirm_funds, submit_payment
 import re
+from django.core.cache import cache
+from time import sleep
 
 
 def start_payment_process(request):
@@ -101,59 +104,6 @@ a. SUCCESSFUL RESPONSE CODE: 201
 a. SUCCESSFUL RESPONSE CODE: 201
 '''
 
-
-#Function to process payments for an array of users
-def process_payments(usernames, amount_to_pay_per_user):
-    for username in usernames:
-        #print(f"Processing payment for user: {username}")
-
-        # Obtain initial access token
-        access_token_call = get_access_token(scope="payments")
-        access_token = access_token_call.json()['access_token']  ## access token that is passed through next function
-        access_api_status = access_token_call.status_code
-        if access_api_status != 200:
-            continue
-
-        # Create VRP consent
-        consent_call = VRP_consent(access_token=access_token, amount_to_pay_per_user=amount_to_pay_per_user)
-        consent_id = consent_call.json()['Data']['ConsentId']
-        consent_api_status = consent_call.status_code
-        if consent_api_status != 201:
-            continue
-
-        # Get customer authorization
-        authorization_code = get_consent(authorization="APPROVED", consent_id=consent_id, username=username)
-        redirecturi_response = authorization_code.json()['redirectUri']
-        get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
-        consent_code = get_code.group(1)
-        authorization_api_status = authorization_code.status_code
-        if authorization_api_status != 200:
-            continue
-
-        # Exchange authorization code for VRP access token
-        vrp_exchange = exchange_code_for_token(code=consent_code)
-        new_access_token = vrp_exchange.json()['access_token']
-        exchange_api_status = vrp_exchange.status_code
-        if exchange_api_status!= 200:
-            continue
-
-        # Confirm available funds
-        confirm_funds_call = confirm_funds(access_token=new_access_token, consent_id=consent_id, amount=amount_to_pay_per_user)
-        funds_status = confirm_funds_call.json()['Data']['FundsAvailableResult']['FundsAvailable']
-        funds_api_status = confirm_funds_call.status_code
-        if funds_api_status != 'Available' & funds_status != 'Available':
-            continue
-
-        # Submit the payment
-        submit_payment_call = submit_payment(access_token=new_access_token, consent_id=consent_id, amount=amount_to_pay_per_user)
-        submit_api_status = submit_payment_call.status_code
-        if submit_api_status == 201:
-            return True
-            #print(f"Payment successful for user: {username}")
-        else:
-            return False
-            #print(f"Payment failed for user: {username}")
-
 '''
 # Main function to initiate payment processing
 def process():
@@ -167,10 +117,121 @@ if __name__ == "__main__":
     process()
 '''
 
+
 def holding_page(request):
-    # hold time for 10mins, API gets called for each person
-    return
+    usernames = request.session.get('usernames', [])
+    amounts = request.session.get('amounts', [])
+    results = process_payments(usernames, amounts)
+    request.session['results'] = results
+    return render(request, 'logic/holding_page.html', {'results': results})
 
 
 def success_page(request):
-    return
+    return render(request, 'logic/success_page.html')
+
+
+def process_payments(usernames, amounts):
+    results = []
+    for username, amount in zip(usernames, amounts):
+        user_result = {'username': username, 'status': 'Pending'}
+
+        access_token_call = get_access_token(scope="payments")
+        access_token = access_token_call.json().get('access_token')
+        if access_token_call.status_code != 200 or not access_token:
+            user_result['status'] = 'Failed'
+            results.append(user_result)
+            continue
+
+        consent_call = VRP_consent(access_token=access_token, amount_to_pay_per_user=amount)
+        consent_id = consent_call.json().get('Data', {}).get('ConsentId')
+        if consent_call.status_code != 201 or not consent_id:
+            user_result['status'] = 'Failed'
+            results.append(user_result)
+            continue
+
+        authorization_code = get_consent(authorization="APPROVED", consent_id=consent_id, username=username)
+        redirecturi_response = authorization_code.json().get('redirectUri')
+        get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
+        consent_code = get_code.group(1) if get_code else None
+        if authorization_code.status_code != 200 or not consent_code:
+            user_result['status'] = 'Failed'
+            results.append(user_result)
+            continue
+
+        vrp_exchange = exchange_code_for_token(code=consent_code)
+        new_access_token = vrp_exchange.json().get('access_token')
+        if vrp_exchange.status_code != 200 or not new_access_token:
+            user_result['status'] = 'Failed'
+            results.append(user_result)
+            continue
+
+        confirm_funds_call = confirm_funds(access_token=new_access_token, consent_id=consent_id, amount=amount)
+        if confirm_funds_call.status_code != 200 or confirm_funds_call.json().get('Data', {}).get(
+                'FundsAvailableResult', {}).get('FundsAvailable') != 'Available':
+            user_result['status'] = 'Failed'
+            results.append(user_result)
+            continue
+
+        submit_payment_call = submit_payment(access_token=new_access_token, consent_id=consent_id, amount=amount)
+        if submit_payment_call.status_code == 201:
+            user_result['status'] = 'Success'
+        else:
+            user_result['status'] = 'Failed'
+
+        results.append(user_result)
+
+    return results
+
+# # Function to process payments for an array of users
+# def process_payments(usernames, amount_to_pay_per_user):
+#     for username in usernames:
+#         # print(f"Processing payment for user: {username}")
+#
+#         # Obtain initial access token
+#         access_token_call = get_access_token(scope="payments")
+#         access_token = access_token_call.json()['access_token']  ## access token that is passed through next function
+#         access_api_status = access_token_call.status_code
+#         if access_api_status != 200:
+#             continue
+#
+#         # Create VRP consent
+#         consent_call = VRP_consent(access_token=access_token, amount_to_pay_per_user=amount_to_pay_per_user)
+#         consent_id = consent_call.json()['Data']['ConsentId']
+#         consent_api_status = consent_call.status_code
+#         if consent_api_status != 201:
+#             continue
+#
+#         # Get customer authorization
+#         authorization_code = get_consent(authorization="APPROVED", consent_id=consent_id, username=username)
+#         redirecturi_response = authorization_code.json()['redirectUri']
+#         get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
+#         consent_code = get_code.group(1)
+#         authorization_api_status = authorization_code.status_code
+#         if authorization_api_status != 200:
+#             continue
+#
+#         # Exchange authorization code for VRP access token
+#         vrp_exchange = exchange_code_for_token(code=consent_code)
+#         new_access_token = vrp_exchange.json()['access_token']
+#         exchange_api_status = vrp_exchange.status_code
+#         if exchange_api_status != 200:
+#             continue
+#
+#         # Confirm available funds
+#         confirm_funds_call = confirm_funds(access_token=new_access_token, consent_id=consent_id,
+#                                            amount=amount_to_pay_per_user)
+#         funds_status = confirm_funds_call.json()['Data']['FundsAvailableResult']['FundsAvailable']
+#         funds_api_status = confirm_funds_call.status_code
+#         if funds_api_status != 'Available' & funds_status != 'Available':
+#             continue
+#
+#         # Submit the payment
+#         submit_payment_call = submit_payment(access_token=new_access_token, consent_id=consent_id,
+#                                              amount=amount_to_pay_per_user)
+#         submit_api_status = submit_payment_call.status_code
+#         if submit_api_status == 201:
+#             return True
+#             # print(f"Payment successful for user: {username}")
+#         else:
+#             return False
+#             # print(f"Payment failed for user: {username}")

@@ -16,55 +16,58 @@ payment_endpoint = "https://ob.sandbox.natwest.com/open-banking/v3.1/pisp/domest
 client_id = "QdWMOwmqVtVXZlFAD_mI5CyRdGQD4J58BYduuIkxZzg%3D"
 client_secret = "__yi_l6ny7Nsa7GjM32e3baiIghwdAG_CoRKRhPTH-s%3D"
 
+
 # 1. get access token
 
 def get_access_token(scope):
-    payload = 'grant_type=client_credentials&client_id={}&client_secret={}&scope={}'.format(client_id, client_secret, scope)
+    payload = 'grant_type=client_credentials&client_id={}&client_secret={}&scope={}'.format(client_id, client_secret,
+                                                                                            scope)
     headers = {
-      'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded'
     }
     response = requests.request("POST", token_endpoint, headers=headers, data=payload)
     print("get_access_token call status:", response.status_code)
     print("access_token:", response.json()['access_token'])
     return response
 
+
 # 2. create a VRP consent
 
 def VRP_consent(amount_to_pay_per_user, access_token):
     payload = json.dumps({
-      "Data": {
-        "ControlParameters": {
-          "VRPType": [
-            "UK.OBIE.VRPType.Other"
-          ],
-          "PSUAuthenticationMethods": [
-            "UK.OBIE.SCANotRequired"
-          ],
-          "VRPSubType": [
-            "UK.NWG.VRPSubType.Single"
-          ],
-          "InitialPayment": {
-            "Amount": "{}".format(amount_to_pay_per_user),
-            "Currency": "GBP"
-          }
+        "Data": {
+            "ControlParameters": {
+                "VRPType": [
+                    "UK.OBIE.VRPType.Other"
+                ],
+                "PSUAuthenticationMethods": [
+                    "UK.OBIE.SCANotRequired"
+                ],
+                "VRPSubType": [
+                    "UK.NWG.VRPSubType.Single"
+                ],
+                "InitialPayment": {
+                    "Amount": "{}".format(amount_to_pay_per_user),
+                    "Currency": "GBP"
+                }
+            },
+            "Initiation": {
+                "CreditorAccount": {
+                    "SchemeName": "SortCodeAccountNumber",
+                    "Identification": "50499910000998",
+                    "Name": "powered by PayPart",
+                    "SecondaryIdentification": "secondary-identif"
+                }
+            }
         },
-        "Initiation": {
-          "CreditorAccount": {
-            "SchemeName": "SortCodeAccountNumber",
-            "Identification": "50499910000998",
-            "Name": "powered by PayPart",
-            "SecondaryIdentification": "secondary-identif"
-          }
-        }
-      },
-      "Risk": {}
+        "Risk": {}
     })
     headers = {
-      'Authorization': 'Bearer {}'.format(access_token),
-      'x-fapi-financial-id': '0015800000jfwxXAAQ',
-      'Content-Type': 'application/json',
-      'x-jws-signature': 'DUMMY_SIG',
-      'x-idempotency-key': '{}'.format(uuid.uuid4())
+        'Authorization': 'Bearer {}'.format(access_token),
+        'x-fapi-financial-id': '0015800000jfwxXAAQ',
+        'Content-Type': 'application/json',
+        'x-jws-signature': 'DUMMY_SIG',
+        'x-idempotency-key': '{}'.format(uuid.uuid4())
     }
 
     response = requests.request("POST", VRP_consent_endpoint, headers=headers, data=payload)
@@ -77,7 +80,6 @@ def VRP_consent(amount_to_pay_per_user, access_token):
 # 3. redirect customer to approve a VRP consent
 # need to add in step here to get account information
 def get_consent(authorization, consent_id, username):
-
     account_number = "50000011223301"
 
     url = "https://api.sandbox.natwest.com/authorize?" \
@@ -97,7 +99,7 @@ def get_consent(authorization, consent_id, username):
 
     response = requests.request("GET", url, headers=headers, data=payload)
     print("get_consent status code", response.status_code)
-    #print(response.text)
+    # print(response.text)
     url_link = response.json()['redirectUri']
     get_code = re.search(r'code=([a-f0-9-]+)', url_link)
     print(get_code.group(1))
@@ -107,7 +109,6 @@ def get_consent(authorization, consent_id, username):
 # 4. exchange authorisation code for access token specific to VRP request
 
 def exchange_code_for_token(code):
-
     payload = 'client_id={}' \
               '&client_secret={}' \
               '&redirect_uri=https%3A%2F%2Fpayment.natwestpayit.com%2Fstatus' \
@@ -144,7 +145,8 @@ def confirm_funds(consent_id, access_token, amount):
         'x-jws-signature': 'DUMMY_SIG',
         'x-idempotency-key': '{}'.format(uuid.uuid4())
     }
-    response = requests.request("POST", "{}/{}/funds-confirmation".format(VRP_consent_endpoint, consent_id), headers=headers, data=payload)
+    response = requests.request("POST", "{}/{}/funds-confirmation".format(VRP_consent_endpoint, consent_id),
+                                headers=headers, data=payload)
     print(response.status_code)
     print("Funds Available Result:", response.json()['Data']['FundsAvailableResult']['FundsAvailable'])
     return response
@@ -153,55 +155,50 @@ def confirm_funds(consent_id, access_token, amount):
 # 6. Submit payment against VRP consent
 
 def submit_payment(access_token, consent_id, amount):
-
-
     payload = json.dumps({
-      "Data": {
-        "ConsentId": "{}".format(consent_id),
-        "PSUAuthenticationMethod": "UK.OBIE.SCANotRequired",
-        "Initiation": {
-          "CreditorAccount": {
-            "SchemeName": "SortCodeAccountNumber",
-            "Identification": "50499910000998",
-            "Name": "powered by PayPart",
-            "SecondaryIdentification": "secondary-identif"
-          }
+        "Data": {
+            "ConsentId": "{}".format(consent_id),
+            "PSUAuthenticationMethod": "UK.OBIE.SCANotRequired",
+            "Initiation": {
+                "CreditorAccount": {
+                    "SchemeName": "SortCodeAccountNumber",
+                    "Identification": "50499910000998",
+                    "Name": "powered by PayPart",
+                    "SecondaryIdentification": "secondary-identif"
+                }
+            },
+            "Instruction": {
+                "InstructionIdentification": "instr-identification",
+                "EndToEndIdentification": "e2e-identification",
+                "InstructedAmount": {
+                    "Amount": "{}".format(amount),
+                    "Currency": "GBP"
+                },
+                "CreditorAccount": {
+                    "SchemeName": "SortCodeAccountNumber",
+                    "Identification": "50499910000998",
+                    "Name": "powered by PayPart",
+                    "SecondaryIdentification": "secondary-identif"
+                },
+                "RemittanceInformation": {
+                    "Unstructured": "Tools",
+                    "Reference": "Tools"
+                }
+            }
         },
-        "Instruction": {
-          "InstructionIdentification": "instr-identification",
-          "EndToEndIdentification": "e2e-identification",
-          "InstructedAmount": {
-            "Amount": "{}".format(amount),
-            "Currency": "GBP"
-          },
-          "CreditorAccount": {
-            "SchemeName": "SortCodeAccountNumber",
-            "Identification": "50499910000998",
-            "Name": "powered by PayPart",
-            "SecondaryIdentification": "secondary-identif"
-          },
-          "RemittanceInformation": {
-            "Unstructured": "Tools",
-            "Reference": "Tools"
-          }
-        }
-      },
-      "Risk": {}
+        "Risk": {}
     })
     headers = {
-      'Authorization': 'Bearer {}'.format(access_token),
-      'x-fapi-financial-id': '0015800000jfwxXAAQ',
-      'Content-Type': 'application/json',
-      'x-jws-signature': 'DUMMY_SIG',
-      'x-idempotency-key': '{}'.format(uuid.uuid4())
+        'Authorization': 'Bearer {}'.format(access_token),
+        'x-fapi-financial-id': '0015800000jfwxXAAQ',
+        'Content-Type': 'application/json',
+        'x-jws-signature': 'DUMMY_SIG',
+        'x-idempotency-key': '{}'.format(uuid.uuid4())
     }
 
     response = requests.request("POST", payment_endpoint, headers=headers, data=payload)
     print(response.status_code)
     return response
-
-
-
 
 # #making the calls
 #
