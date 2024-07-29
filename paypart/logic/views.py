@@ -20,13 +20,18 @@ from django.http import HttpResponse
 
 def start_payment_process(request): #MA
     #landing page, payment = £2000, asks for how many splitting between & asks user whether they want to split or use custom
+    total_amount_to_pay = 2000
+
     return HttpResponse("Welcome to Paypart")
 
 def choose_split(request):
-    # take the payment amount and split it between number of users
+    # enables the user to choose which split they want to go for
     return #amount
 
-def choose_custom(request):
+def even_split(request):
+    return
+
+def custom_split(request):
     #taking the custom value from the input
     return #amount
 
