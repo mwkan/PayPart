@@ -7,7 +7,7 @@ import re
 issuer = "https://api.sandbox.natwest.com"
 authorization_endpoint = "https://api.sandbox.natwest.com/authorize"
 token_endpoint = "https://ob.sandbox.natwest.com/token"
-VPR_consent_endpoint = "https://ob.sandbox.natwest.com/open-banking/v3.1/pisp/domestic-vrp-consents"
+VRP_consent_endpoint = "https://ob.sandbox.natwest.com/open-banking/v3.1/pisp/domestic-vrp-consents"
 jwks_uri = "https://keystore.openbankingtest.org.uk/0015800000jfwxXAAQ/0015800000jfwxXAAQ.jwks"
 registration_endpoint = "https://ob.sandbox.natwest.com/register"
 payment_endpoint = "https://ob.sandbox.natwest.com/open-banking/v3.1/pisp/domestic-vrps"
@@ -15,7 +15,6 @@ payment_endpoint = "https://ob.sandbox.natwest.com/open-banking/v3.1/pisp/domest
 # environment variables
 client_id = "QdWMOwmqVtVXZlFAD_mI5CyRdGQD4J58BYduuIkxZzg%3D"
 client_secret = "__yi_l6ny7Nsa7GjM32e3baiIghwdAG_CoRKRhPTH-s%3D"
-idempotency_key = uuid.uuid4()
 
 # 1. get access token
 
@@ -29,9 +28,9 @@ def get_access_token(scope):
     print("access_token:", response.json()['access_token'])
     return response
 
-# 2. create a VPR consent
+# 2. create a VRP consent
 
-def VPR_consent(amount_to_pay_per_user, access_token):
+def VRP_consent(amount_to_pay_per_user, access_token):
     payload = json.dumps({
       "Data": {
         "ControlParameters": {
@@ -65,10 +64,10 @@ def VPR_consent(amount_to_pay_per_user, access_token):
       'x-fapi-financial-id': '0015800000jfwxXAAQ',
       'Content-Type': 'application/json',
       'x-jws-signature': 'DUMMY_SIG',
-      'x-idempotency-key': '{}'.format(idempotency_key)
+      'x-idempotency-key': '{}'.format(uuid.uuid4())
     }
 
-    response = requests.request("POST", VPR_consent_endpoint, headers=headers, data=payload)
+    response = requests.request("POST", VRP_consent_endpoint, headers=headers, data=payload)
 
     print("VRP call status:", response.status_code)
     print("consent_id:", response.json()['Data']['ConsentId'])
@@ -127,32 +126,27 @@ def exchange_code_for_token(code):
 # 5. Confirm customer has available funds
 
 def confirm_funds(consent_id, access_token, amount):
-    payload = json.dumps(
-        {
-            "Data": {
-                "ConsentId": "{}".format(consent_id),
-                "Reference": "PayPart payment",
-                "InstructedAmount": {
-                    "Amount": "{}".format(amount),
-                    "Currency": "GBP"
-                }
-            },
-            "Risk": {}
-        }
-    )
+    payload = json.dumps({
+        "Data": {
+            "ConsentId": "{}".format(consent_id),
+            "Reference": "Tools",
+            "InstructedAmount": {
+                "Amount": "{}".format(amount),
+                "Currency": "GBP"
+            }
+        },
+        "Risk": {}
+    })
     headers = {
-        "Authorization": "Bearer {}".format(access_token),
-        "x- fapi-financial-id": "0015800000jfwxXAAQ",
-        "x-fapi-auth-date" : "Sun, 16 Sep 2018 11: 43:31 UTC",
-        "x-fapi-customer-ip-address": "1.2.3.4",
-        "x-fapi-interaction-id": "{}".format(uuid.uuid4()),
-        "Content-Type" : "application/json",
-        "Accept": "application/json",
-        'x-idempotency-key': '{}'.format(idempotency_key),
+        'Authorization': 'Bearer {}'.format(access_token),
+        'x-fapi-financial-id': '0015800000jfwxXAAQ',
+        'Content-Type': 'application/json',
         'x-jws-signature': 'DUMMY_SIG',
+        'x-idempotency-key': '{}'.format(uuid.uuid4())
     }
-    response = requests.request("POST", VPR_consent_endpoint, headers=headers, data=payload)
-    print(response.text)
+    response = requests.request("POST", "{}/{}/funds-confirmation".format(VRP_consent_endpoint, consent_id), headers=headers, data=payload)
+    print(response.status_code)
+    print("Funds Available Result:", response.json()['Data']['FundsAvailableResult']['FundsAvailable'])
     return response
 
 
@@ -199,45 +193,44 @@ def submit_payment(access_token, consent_id, amount):
       'x-fapi-financial-id': '0015800000jfwxXAAQ',
       'Content-Type': 'application/json',
       'x-jws-signature': 'DUMMY_SIG',
-      'x-idempotency-key': '{}'.format(idempotency_key)
+      'x-idempotency-key': '{}'.format(uuid.uuid4())
     }
 
     response = requests.request("POST", payment_endpoint, headers=headers, data=payload)
-
-    print(response.text)
-
-
-
-
-
-#making the calls
-
-## need to get access token for each payment
-access_token_call = get_access_token(scope="payments")
-access_token = access_token_call.json()['access_token'] ## access token that is passed through next function
-api_status = access_token_call.status_code ##this will give output 200 if successful
-
-## need to get the VRP Consent for each payment
-consent_call = VPR_consent(amount_to_pay_per_user=30, access_token=access_token)
-consent_id = consent_call.json()['Data']['ConsentId']
-api_status = consent_call.status_code ##this will give output 201 if successful
-
-
-## get customer authorisation, hard coded username until I can update the test data
-approve = get_consent(authorization="APPROVED", consent_id=consent_id, username="djefferson@hackathon-team.2024.co.uk")
-redirecturi_response = approve.json()['redirectUri']
-get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
-consent_code = get_code.group(1)
-api_status = approve.status_code ##this will give output 200 if successful
-
-## exchange authorisation code for access token
-exchange = exchange_code_for_token(code=consent_code)
-new_access_token = exchange.json()['access_token']
-api_status = exchange.status_code ##this will give output 200 if successful
-
-## submit the payment
-submit_payment(access_token=new_access_token, consent_id=consent_code, amount=30)
+    print(response.status_code)
+    return response
 
 
 
 
+# #making the calls
+#
+# ## need to get access token for each payment
+# access_token_call = get_access_token(scope="payments")
+# access_token = access_token_call.json()['access_token'] ## access token that is passed through next function
+# api_status = access_token_call.status_code ##this will give output 200 if successful
+#
+# ## need to get the VRP Consent for each payment
+# consent_call = VRP_consent(amount_to_pay_per_user=30, access_token=access_token)
+# consent_id = consent_call.json()['Data']['ConsentId']
+# api_status = consent_call.status_code ##this will give output 201 if successful
+#
+#
+# ## get customer authorisation, hard coded username until I can update the test data
+# approve = get_consent(authorization="APPROVED", consent_id=consent_id, username="djefferson@hackathon-team.2024.co.uk")
+# redirecturi_response = approve.json()['redirectUri']
+# get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
+# consent_code = get_code.group(1)
+# api_status = approve.status_code ##this will give output 200 if successful
+#
+# ## exchange authorisation code for access token
+# exchange = exchange_code_for_token(code=consent_code)
+# new_access_token = exchange.json()['access_token']
+# api_status = exchange.status_code ##this will give output 200 if successful
+#
+# ## confirm account has the funds
+# confirm_funds(access_token=new_access_token, consent_id=consent_id, amount=30)
+#
+# ## submit the payment
+# submit_payment_request = submit_payment(access_token=new_access_token, consent_id=consent_id, amount=30)
+# api_status = submit_payment_request.status_code ##this will be 201 if its successful
