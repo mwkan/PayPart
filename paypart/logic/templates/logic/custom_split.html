@@ -7,8 +7,13 @@
     <h1>Custom Split</h1>
     <form method="post">
         {% csrf_token %}
-
+        {% for form in forms %}
+            <div>
+                {{ form.username.label_tag }} {{ form.username }}
+                {{ form.amount.label_tag }} {{ form.amount }}
+            </div>
+        {% endfor %}
+        <button type="submit">Submit</button>
     </form>
-    <p>Each person should pay: £{{ amount_per_person }}</p>
 </body>
 </html>

@@ -6,5 +6,15 @@
 <body>
     <h1>Even Split</h1>
     <p>Each person should pay: £{{ amount_per_person }}</p>
+    <form method="post">
+        {% csrf_token %}
+        {% for form in forms %}
+            <div>
+                {{ form.username.label_tag }} {{ form.username }} - £{{ amount_per_person }}
+                {{ form.amount.as_hidden }}  <!-- Amount is hidden because it's fixed in even split -->
+            </div>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
