@@ -5,10 +5,18 @@
 </head>
 <body>
     <h1>Start Payment Process</h1>
+    <p>Total Amount to be paid: £{{ 2000 }}</p>
+
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <buton type="submit">Next</buton>
+
+        <h2>Split Form</h2>
+        {{ split_form.as_p }}
+
+        <h2>Choose Split Type</h2>
+        {{ split_choice_form.as_p }}
+
+        <button type="submit">Submit</button>
     </form>
 </body>
 </html>
