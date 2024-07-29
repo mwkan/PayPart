@@ -76,6 +76,87 @@ def process_payments(request):  # MWK
     return  # true or false
 
 
+'''
+API Calls
+
+Each call will be done per customer
+
+1. Obtain an access token
+a. Expires in 600 (seconds)
+b. SUCCESSFUL RESPONSE CODE: 200
+
+2. Create a VRP Consent:
+a. here we define how much the payment is for, variable = amount_to_pay_per_user
+b. SUCCESSFUL RESPONSE CODE: 201
+
+3. Get customer authorisation:
+a. this is where we take the customer inputs, we will use variable = username
+b. it will be default approved so we wont model the user approving, it will be forced
+c. SUCCESSFUL RESPONSE CODE: 200
+
+4. Exchange Authorisation Code for Access Token Specific to the VRP Request
+a. Expires in 600 (seconds)
+b. SUCCESSFUL RESPONSE CODE: 200
+
+5. Confirm Customer has Available funds prior to submitting VRP Payment
+a. SUCCESSFUL RESPONSE CODE: 201
+
+6. Submit the payment against the VRP Request
+a. SUCCESSFUL RESPONSE CODE: 201
+'''
+
+
+# Function to process payments for an array of users
+def process_payments(usernames, amount_to_pay_per_user):
+    for username in usernames:
+        #print(f"Processing payment for user: {username}")
+
+        # Obtain initial access token
+        access_token = obtain_access_token()
+        if access_token != 200:
+            continue
+
+        # Create VRP consent
+        consent_id = create_vrp_consent(access_token, amount_to_pay_per_user)
+        if consent_id != 201:
+            continue
+
+        # Get customer authorization
+        authorization_code = get_customer_authorization(username)
+        if authorization_code != 200:
+            continue
+
+        # Exchange authorization code for VRP access token
+        vrp_access_token = exchange_authorization_code(authorization_code)
+        if vrp_access_token != 200
+            continue
+
+        # Confirm available funds
+        if confirm_available_funds(vrp_access_token) != 201:
+            continue
+
+        # Submit the payment
+        if submit_payment(vrp_access_token) == 201:
+            return True
+            #print(f"Payment successful for user: {username}")
+        else:
+            return False
+            #print(f"Payment failed for user: {username}")
+
+'''
+# Main function to initiate payment processing
+def process():
+    usernames = ["user1", "user2", "user3", "user4", "user5"]
+    amount_to_pay_per_user = 50.0  # Define the amount to be paid per user
+    process_payments(usernames, amount_to_pay_per_user)
+
+
+# Run the main function
+if __name__ == "__main__":
+    process()
+'''
+>>>>>>> 3ae2579 (add process payment function)
+
 def holding_page(request):
     # hold time for 10mins
     return
