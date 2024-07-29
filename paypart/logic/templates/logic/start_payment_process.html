@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Start Payment Process </title>
+</head>
+<body>
+    <h1>Start Payment Process</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <buton type="submit">Next</buton>
+    </form>
+</body>
+</html>

@@ -1,29 +1,24 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
-# total cost = x
-# Split number = y (number of people the user wants to split the cost between)
-# Amount per person = x/y
-# Ask for input y times:
-# Full name:
-# amount to pay: (editable)
-# Bank (option set):
-# Any other questions from API:
-
-# Front end should show difference between total and amount input on each person
-
-# API takes info from this and inputs it y times to each user and returns true or false for each user
-
-# if all true, then return success page
-# if not all true, then return fail page
+from django.shortcuts import render, redirect
+from .forms import SplitForm
 
 
-def start_payment_process(request): #MA
-    #landing page, payment = £2000, asks for how many splitting between & asks user whether they want to split or use custom
-    total_amount_to_pay = 2000
+def start_payment_process(request):
+    if request.method == 'POST':
+        form = SplitForm(request.POST)
+        if form.is_valid():
+            num_people = form.cleaned_data['num_people']
+            request.session['total_amount'] = 2000.0
+            request.session['num_people'] = num_people
+            return redirect('collect_user_amounts')
+    else:
+        form = SplitForm()
 
-    return HttpResponse("Welcome to Paypart")
+    return render(request, 'logic/start_payment_process.html', {'form': form})
 
+def collect_user_amounts(request):
+    return HttpResponse("This is the collect_user_amounts page, which is yet to be implemented.")
 def choose_split(request):
     # enables the user to choose which split they want to go for
     return #amount
