@@ -73,6 +73,8 @@ def get_username(request):
 
 def process_payments(request):  # MWK
     # calling all the stages of the API and iterate through each username to do it for each person
+
+
     return  # true or false
 
 
