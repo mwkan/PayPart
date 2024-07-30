@@ -1,47 +1,83 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Processing Payments</title>-->
+<!--    <style>-->
+<!--        .container {-->
+<!--            width: 80%;-->
+<!--            margin: 0 auto;-->
+<!--            text-align: center;-->
+<!--        }-->
+<!--        .status {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--            padding: 10px;-->
+<!--            border-bottom: 1px solid #ccc;-->
+<!--        }-->
+<!--        .status p {-->
+<!--            margin: 0;-->
+<!--        }-->
+<!--        .success {-->
+<!--            color: green;-->
+<!--        }-->
+<!--        .failed {-->
+<!--            color: red;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div class="container">-->
+<!--        <h1>Processing Payments</h1>-->
+<!--        <p>Please wait while we process the payments. This may take a few moments.</p>-->
+<!--        <div id="statuses">-->
+<!--            {% for result in results %}-->
+<!--                <div class="status">-->
+<!--                    <p>{{ result.username }}</p>-->
+<!--                    <p class="{% if result.status == 'Success' %}success{% else %}failed{% endif %}">-->
+<!--                        {% if result.status == 'Success' %}✔{% else %}✘{% endif %}-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Processing Payments</title>
-    <style>
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .status {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-        .status p {
-            margin: 0;
-        }
-        .success {
-            color: green;
-        }
-        .failed {
-            color: red;
-        }
-    </style>
+    <title>Holding Page</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Processing Payments</h1>
-        <p>Please wait while we process the payments. This may take a few moments.</p>
-        <div id="statuses">
-            {% for result in results %}
-                <div class="status">
-                    <p>{{ result.username }}</p>
-                    <p class="{% if result.status == 'Success' %}success{% else %}failed{% endif %}">
-                        {% if result.status == 'Success' %}✔{% else %}✘{% endif %}
-                    </p>
-                </div>
+    <h1>Payment Status</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in request.session.payment_results %}
+                <tr>
+                    <td>{{ result.username }}</td>
+                    <td>
+                        {% if result.status == 'Success' %}
+                            ✔️
+                        {% else %}
+                            ❌
+                        {% endif %}
+                    </td>
+                </tr>
             {% endfor %}
-        </div>
-    </div>
+        </tbody>
+    </table>
+    <form action="{% url 'start_payment_process' %}" method="get">
+        <button type="submit">Back to Start Payment Process</button>
+    </form>
 </body>
 </html>

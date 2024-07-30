@@ -200,7 +200,10 @@ def process_payments(usernames, amounts, request):
 
         results.append(user_result)
 
+    #stores results in the session
     request.session['payment_results'] = results
+
+    #check for any failed payments
     if any(result['status'] == 'Failed' for result in results):
         return redirect('holding_page')
     return redirect('success_page')
@@ -215,9 +218,9 @@ def process_payments_view(request):
         messages.error(request, "Invalid entry. Please try again.")
         return redirect('start_payment_process')  # redirect to start payment
 
-    results = process_payments(usernames, amounts, request)
+    #calls the process payments function which handles redirection based on results
+    return process_payments(usernames, amounts, request)
 
-    return render(request, 'logic/process_payments.html', {'results': results})
 
 # # Function to process payments for an array of users
 # def process_payments(usernames, amount_to_pay_per_user):
