@@ -60,12 +60,11 @@ Your system should install the requirements automatically, but if needed run:
 pip install -r requirements.txt
 ```
 ---
-### **Configuration** ###
+### **Running The App** ###
 ---
 
-- 1 -  API keys:
-- 2 - Run programme:
-- In your terminal window, cd to PayPart/paypart and then run:
+- Run programme:
+  In your terminal window, cd to PayPart/paypart and then run:
 ```
 python manage.py runserver
 ```
