@@ -26,6 +26,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
             text-align: center;
+            position: relative; /* For positioning the back button */
         }
 
         .logo {
@@ -76,7 +77,7 @@
             margin-bottom: 10px;
         }
 
-        button {
+        button, .back-button {
             background-color: white; /* White background for button */
             color: #401664; /* NatWest purple for button text */
             padding: 10px 20px;
@@ -86,11 +87,21 @@
             font-size: 16px;
             display: block; /* Ensure button takes up space */
             width: 100%; /* Full width button */
+            text-decoration: none; /* Remove underline from link */
+            text-align: center; /* Center the text */
         }
 
-        button:hover {
+        button:hover, .back-button:hover {
             background-color: #401664; /* NatWest purple background on hover */
             color: white; /* White text on hover */
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: auto; /* Auto width for back button */
+            display: inline-block; /* Inline block to fit content */
         }
     </style>
     <script>
@@ -121,6 +132,9 @@
 </head>
 <body>
     <div class="container">
+        <!-- Back button -->
+        <a href="{% url 'start_payment_process' %}" class="back-button">Back</a>
+
         <!-- Add logo here -->
         <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
 

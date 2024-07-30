@@ -26,6 +26,7 @@
             width: 80%;
             max-width: 600px; /* Limit width for larger screens */
             text-align: center;
+            position: relative; /* For positioning the back button */
         }
 
         .logo {
@@ -65,7 +66,7 @@
             color: #401664; /* NatWest purple for labels */
         }
 
-        button {
+        button, .back-button {
             background-color: white; /* White background for button */
             color: #401664; /* NatWest purple for button text */
             padding: 10px 20px;
@@ -75,28 +76,41 @@
             font-size: 16px;
             display: block; /* Ensure button takes up space */
             width: 100%; /* Full width button */
+            text-decoration: none; /* Remove underline from link */
+            text-align: center; /* Center the text */
         }
 
-        button:hover {
+        button:hover, .back-button:hover {
             background-color: #401664; /* NatWest purple background on hover */
             color: white; /* White text on hover */
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: auto; /* Auto width for back button */
+            display: inline-block; /* Inline block to fit content */
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Back button -->
+        <a href="{% url 'start_payment_process' %}" class="back-button">Back</a>
+
         <!-- Add logo here -->
         <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
 
         <h1>Splitting Evenly</h1>
-        <h3>Each person should pay: £{{ amount_per_person }}</h3>
+        <h3>Each person should pay: £{{ amount_per_person|floatformat:2 }}</h3>
         <p>Enter each person's NatWest Username</p>
         <form method="post">
             {% csrf_token %}
             {% for form in forms %}
                 <div>
-                    {{ form.username.label_tag }} {{ form.username }} : £{{ amount_per_person }}
-                    {{ form.amount.as_hidden }}  <!-- Amount is hidden because it's fixed in even split -->
+                    {{ form.username.label_tag }} {{ form.username }} : £{{ amount_per_person|floatformat:2 }}
+                    {{ form.amount.as_hidden }}
                 </div>
             {% endfor %}
             <button type="submit">Submit</button>
