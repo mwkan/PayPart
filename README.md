@@ -18,7 +18,7 @@ Introducing PayPart, the revolutionary tool that transforms the way you handle g
 -----
 
 
-Clone the repo
+Clone the repo:
 
 ```
 git clone https://github.com/mwkan/PayPart.git
