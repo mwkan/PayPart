@@ -4,17 +4,22 @@ import uuid
 import re
 
 # endpoints
-issuer = "https://api.sandbox.natwest.com"
-authorization_endpoint = "https://api.sandbox.natwest.com/authorize"
 token_endpoint = "https://ob.sandbox.natwest.com/token"
 VRP_consent_endpoint = "https://ob.sandbox.natwest.com/open-banking/v3.1/pisp/domestic-vrp-consents"
-registration_endpoint = "https://ob.sandbox.natwest.com/register"
 payment_endpoint = "https://ob.sandbox.natwest.com/open-banking/v3.1/pisp/domestic-vrps"
 
 # environment variables
 client_id = "QdWMOwmqVtVXZlFAD_mI5CyRdGQD4J58BYduuIkxZzg%3D"
 client_secret = "__yi_l6ny7Nsa7GjM32e3baiIghwdAG_CoRKRhPTH-s%3D"
 
+# dictionary of our sample customer usernames and account numbers, this would be a further API call but due to time this is hard coded
+sample_data = {
+    "djefferson@hackathon-team.2024.co.uk": 50000011223301,
+    "jpeterson@hackathon-team.2024.co.uk": 50000011223401,
+    "alicesmith@hackathon-team.2024.co.uk": 50000011223777,
+    "alanarnold@hackathon-team.2024.co.uk": 50000011246245,
+    "louisesmith@hackathon-team.2024.co.uk": 50000012132301
+}
 
 # 1. get access token
 
@@ -77,9 +82,10 @@ def VRP_consent(amount_to_pay_per_user, access_token):
 
 
 # 3. redirect customer to approve a VRP consent
-# need to add in step here to get account information
 def get_consent(authorization, consent_id, username):
-    account_number = "50000012132301"
+    #for the username, we need to get account number. This is where we would want to do another api call but we will retrieve from dictionary
+
+    account_number = sample_data.get(username)
 
     url = "https://api.sandbox.natwest.com/authorize?" \
           "client_id={}&" \
@@ -201,7 +207,7 @@ def submit_payment(access_token, consent_id, amount):
 
 # #making the calls
 #
-## need to get access token for each payment
+# # need to get access token for each payment
 # access_token_call = get_access_token(scope="payments")
 # access_token = access_token_call.json()['access_token'] ## access token that is passed through next function
 # api_status = access_token_call.status_code ##this will give output 200 if successful
@@ -213,7 +219,7 @@ def submit_payment(access_token, consent_id, amount):
 #
 #
 # ## get customer authorisation, hard coded username until I can update the test data
-# approve = get_consent(authorization="APPROVED", consent_id=consent_id, username="louisesmith@hackathon-team.2024.co.uk")
+# approve = get_consent(authorization="APPROVED", consent_id=consent_id, username="jpeterson@hackathon-team.2024.co.uk")
 # redirecturi_response = approve.json()['redirectUri']
 # get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
 # consent_code = get_code.group(1)
