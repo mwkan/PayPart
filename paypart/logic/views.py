@@ -142,9 +142,9 @@ def check_funds_no_payment(usernames, amounts, request):
     print(amounts)
 
     results = []
+
     for username, amount in zip(usernames, amounts):
         user_result = {'username': username, 'status': 'Pending', 'message': ''}
-
         try:
             # Obtain access token
             access_token_call = get_access_token(scope="payments")
@@ -180,6 +180,12 @@ def check_funds_no_payment(usernames, amounts, request):
             if confirm_funds_call.status_code != 200 or confirm_funds_call.json().get('Data', {}).get(
                     'FundsAvailableResult', {}).get('FundsAvailable') != 'Available':
                 raise ValueError('Funds not available')
+
+            user_result['status'] = 'Success'
+
+        except AttributeError:
+            user_result['status'] = 'Failed'
+            user_result['message'] = 'Username not found'
 
         except (requests.HTTPError, ValueError) as e:
             user_result['status'] = 'Failed'
@@ -245,6 +251,8 @@ def process_payments(usernames, amounts, request):
                 user_result['status'] = 'Success'
             else:
                 raise ValueError('Payment submission failed')
+
+            user_result['status'] = 'Success'
 
         except (requests.HTTPError, ValueError) as e:
             user_result['status'] = 'Failed'
