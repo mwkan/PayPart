@@ -31,7 +31,7 @@ def get_access_token(scope):
     }
     response = requests.request("POST", token_endpoint, headers=headers, data=payload)
     print("get_access_token call status:", response.status_code)
-    print("access_token:", response.json()['access_token'])
+    #print("access_token:", response.json()['access_token'])
     return response
 
 
@@ -77,7 +77,7 @@ def VRP_consent(amount_to_pay_per_user, access_token):
     response = requests.request("POST", VRP_consent_endpoint, headers=headers, data=payload)
 
     print("VRP call status:", response.status_code)
-    print("consent_id:", response.json()['Data']['ConsentId'])
+    #print("consent_id:", response.json()['Data']['ConsentId'])
     return response
 
 
@@ -125,7 +125,7 @@ def exchange_code_for_token(code):
 
     response = requests.request("POST", token_endpoint, headers=headers, data=payload)
     print("exchange_code_call:", response.status_code)
-    print("new_access_token:", response.json()['access_token'])
+    #print("new_access_token:", response.json()['access_token'])
     return response
 
 
@@ -135,7 +135,7 @@ def confirm_funds(consent_id, access_token, amount):
     payload = json.dumps({
         "Data": {
             "ConsentId": "{}".format(consent_id),
-            "Reference": "Tools",
+            "Reference": "powered by PayPart",
             "InstructedAmount": {
                 "Amount": "{}".format(amount),
                 "Currency": "GBP"
@@ -186,8 +186,8 @@ def submit_payment(access_token, consent_id, amount):
                     "SecondaryIdentification": "secondary-identif"
                 },
                 "RemittanceInformation": {
-                    "Unstructured": "Tools",
-                    "Reference": "Tools"
+                    "Unstructured": "powered by PayPart",
+                    "Reference": "powered by PayPart"
                 }
             }
         },

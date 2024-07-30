@@ -142,6 +142,55 @@ def success_page(request):
     results = request.session.get('payment_results', [])
     return render(request, 'logic/success_page.html', {'results': results})
 
+def check_funds_no_payment(usernames, amounts, request):
+    results = []
+    funds_available = []
+    for username, amount in zip(usernames, amounts):
+        user_result = {'username': username, 'status': 'Pending'}
+
+        access_token_call = get_access_token(scope="payments")
+        access_token = access_token_call.json().get('access_token')
+        if access_token_call.status_code != 200 or not access_token:
+            user_result['status'] = 'Failed'
+            results.append(user_result)
+            continue
+
+        consent_call = VRP_consent(access_token=access_token, amount_to_pay_per_user=amount)
+        consent_id = consent_call.json().get('Data', {}).get('ConsentId')
+        if consent_call.status_code != 201 or not consent_id:
+            user_result['status'] = 'Failed'
+            results.append(user_result)
+            continue
+
+        authorization_code = get_consent(authorization="APPROVED", consent_id=consent_id, username=username)
+        redirecturi_response = authorization_code.json().get('redirectUri')
+        get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
+        consent_code = get_code.group(1) if get_code else None
+        if authorization_code.status_code != 200 or not consent_code:
+            user_result['status'] = 'Failed'
+            results.append(user_result)
+            continue
+
+        vrp_exchange = exchange_code_for_token(code=consent_code)
+        new_access_token = vrp_exchange.json().get('access_token')
+        if vrp_exchange.status_code != 200 or not new_access_token:
+            user_result['status'] = 'Failed'
+            results.append(user_result)
+            continue
+
+        confirm_funds_call = confirm_funds(access_token=new_access_token, consent_id=consent_id, amount=amount)
+        funds_status = confirm_funds_call.json().get('Data', {}).get(
+                'FundsAvailableResult', {}).get('FundsAvailable')
+        print("funds_status:",funds_status)
+        funds_available_list = funds_available.append(funds_status)
+        print("funds_available:", funds_available_list)
+        if confirm_funds_call.status_code != 200 or confirm_funds_call.json().get('Data', {}).get(
+                'FundsAvailableResult', {}).get('FundsAvailable') != 'Available':
+            user_result['status'] = 'Failed'
+            results.append(user_result)
+            continue
+
+        return funds_available_list
 
 def process_payments(usernames, amounts, request):
     # usernames = ['user1', 'user2', 'user3']
@@ -218,8 +267,19 @@ def process_payments_view(request):
         messages.error(request, "Invalid entry. Please try again.")
         return redirect('start_payment_process')  # redirect to start payment
 
+    funds_available = check_funds_no_payment(usernames, amounts, request)
+    print(funds_available)
+    for status in funds_available:
+        if status == 'Available':
+            run_payment = True
+        else:
+            break
+
+    if run_payment == True:
+        payment = process_payments(usernames, amounts, request)
+
     #calls the process payments function which handles redirection based on results
-    return process_payments(usernames, amounts, request)
+    return payment
 
 
 # # Function to process payments for an array of users
