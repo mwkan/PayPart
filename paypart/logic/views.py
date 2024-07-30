@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from . import forms
 from .api import get_access_token, VRP_consent, get_consent, exchange_code_for_token, confirm_funds, submit_payment
 import re
+from django.contrib import messages
 # from django.core.cache import cache
 # from time import sleep
 
@@ -186,6 +187,18 @@ def process_payments(request):
     return results
 
 
+def process_payments_view(request):
+    usernames = request.session.get('usernames')
+    amounts = request.session.get('amounts')
+
+    if not usernames or not amounts:
+        # return error message and redirect to an error page
+        messages.error(request, "Invalid entry. Please try again.")
+        return redirect('start_payment_process')  # redirect to start payment
+
+    results = process_payments(usernames, amounts)
+
+    return render(request, 'logic/process_payments.html', {'results': results})
 
 # # Function to process payments for an array of users
 # def process_payments(usernames, amount_to_pay_per_user):

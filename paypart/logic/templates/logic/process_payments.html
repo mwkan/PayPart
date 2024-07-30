@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment Results</title>
+</head>
+<body>
+    <h1>Payment Results</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>{{ result.username }}</td>
+                <td>{{ result.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'start_payment_process' %}">Start New Payment Process</a>
+</body>
+</html>
