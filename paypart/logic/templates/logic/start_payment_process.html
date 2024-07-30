@@ -2,10 +2,33 @@
 <html>
 <head>
     <title> Start Payment Process </title>
+        <style>
+        .messages {
+            list-style-type: none;
+            padding: 0;
+        }
+        .messages li {
+            color: #FF0000;  /* Set text color to red */
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #FF0000;  /* Set border color to red */
+            background-color: #ffe6e6;  /* Light red background for better visibility */
+        }
+    </style>
 </head>
 <body>
     <h1>Start Payment Process</h1>
     <p>Total Amount to be paid: £{{ 2000 }}</p>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+
+
+    {% endif %}
 
     <form method="post">
         {% csrf_token %}
