@@ -68,4 +68,6 @@ pip install -r requirements.txt
 ```
 python manage.py runserver
 ```
+  To get to the app landing page, go to: http://localhost:8000/logic/start/ <br>
+  If your server is running on a different port, replace 8000 with the correct port number.
 
