@@ -143,12 +143,12 @@ def success_page(request):
     return render(request, 'logic/success_page.html', {'results': results})
 
 
-def process_payments(request):
+def process_payments(usernames, amounts, request):
     # usernames = ['user1', 'user2', 'user3']
     # amounts = [50.0, 75.0, 100.0]
-    usernames = request.session.get('usernames', [])
+    # usernames = request.session.get('usernames', [])
     print(usernames)
-    amounts = request.session.get('amounts', [])
+    # amounts = request.session.get('amounts', [])
     print(amounts)
 
     results = []
@@ -215,7 +215,7 @@ def process_payments_view(request):
         messages.error(request, "Invalid entry. Please try again.")
         return redirect('start_payment_process')  # redirect to start payment
 
-    results = process_payments(usernames, amounts)
+    results = process_payments(usernames, amounts, request)
 
     return render(request, 'logic/process_payments.html', {'results': results})
 

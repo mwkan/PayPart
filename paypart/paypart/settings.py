@@ -81,7 +81,7 @@ DATABASES = {
     }
 }
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default, using database-backed sessions
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
