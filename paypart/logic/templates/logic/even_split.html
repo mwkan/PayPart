@@ -7,8 +7,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #401664; /* NatWest purple background for the entire page */
-            color: white; /* Default text color */
+            background-color: white; /* NatWest purple background for the entire page */
+            color: #401664; /* Default text color */
             margin: 0;
             padding: 0;
             display: flex;
@@ -18,7 +18,7 @@
         }
 
         .container {
-            background-color: #FBC9CF; /* Light red background for the container */
+            background-color: white; /* Light red background for the container */
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
@@ -28,7 +28,7 @@
         }
 
         h1 {
-            color: #D71C2B; /* Red color for the heading */
+            color: #401664; /* Red color for the heading */
             margin-bottom: 20px;
         }
 
@@ -39,7 +39,7 @@
         }
 
         form {
-            background-color: #FBC9CF; /* Same background color for the form */
+            background-color: white; /* Same background color for the form */
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
@@ -55,8 +55,8 @@
         }
 
         button {
-            background-color: #D71C2B; /* Red color for button background */
-            color: white;
+            background-color: white; /* Red color for button background */
+            color: #401664;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -65,25 +65,11 @@
         }
 
         button:hover {
-            background-color: #EE2033; /* Darker red color on hover */
+            background-color: #401664; /* Darker red color on hover */
         }
     </style>
 </head>
 <body>
-<<<<<<< HEAD
-    <h1>Even Split</h1>
-    <p>Each person should pay: £{{ amount_per_person }}</p>
-    <form method="post">
-        {% csrf_token %}
-        {% for form in forms %}
-            <div>
-                {{ form.username.label_tag }} {{ form.username }} : £{{ amount_per_person }}
-                {{ form.amount.as_hidden }}  <!-- Amount is hidden because it's fixed in even split -->
-            </div>
-        {% endfor %}
-        <button type="submit">Submit</button>
-    </form>
-=======
     <div class="container">
         <h1>Even Split</h1>
         <p>Each person should pay: £{{ amount_per_person }}</p>
@@ -98,6 +84,5 @@
             <button type="submit">Submit</button>
         </form>
     </div>
->>>>>>> 0085cc7 (Styling for pages)
 </body>
 </html>

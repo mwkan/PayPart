@@ -1,58 +1,7 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Processing Payments</title>-->
-<!--    <style>-->
-<!--        .container {-->
-<!--            width: 80%;-->
-<!--            margin: 0 auto;-->
-<!--            text-align: center;-->
-<!--        }-->
-<!--        .status {-->
-<!--            display: flex;-->
-<!--            justify-content: space-between;-->
-<!--            align-items: center;-->
-<!--            padding: 10px;-->
-<!--            border-bottom: 1px solid #ccc;-->
-<!--        }-->
-<!--        .status p {-->
-<!--            margin: 0;-->
-<!--        }-->
-<!--        .success {-->
-<!--            color: green;-->
-<!--        }-->
-<!--        .failed {-->
-<!--            color: red;-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div class="container">-->
-<!--        <h1>Processing Payments</h1>-->
-<!--        <p>Please wait while we process the payments. This may take a few moments.</p>-->
-<!--        <div id="statuses">-->
-<!--            {% for result in results %}-->
-<!--                <div class="status">-->
-<!--                    <p>{{ result.username }}</p>-->
-<!--                    <p class="{% if result.status == 'Success' %}success{% else %}failed{% endif %}">-->
-<!--                        {% if result.status == 'Success' %}✔{% else %}✘{% endif %}-->
-<!--                    </p>-->
-<!--                </div>-->
-<!--            {% endfor %}-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-<<<<<<< HEAD
-    <title>Holding Page</title>
-=======
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Processing Payments</title>
     <style>
@@ -60,28 +9,28 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #401664; /* NatWest purple background for the entire page */
-            color: white; /* Default text color */
+            background-color: white; /* NatWest white background for the entire page */
+            color: #401664; /* Default text color (NatWest purple) */
         }
 
         .container {
             width: 80%;
             margin: 20px auto;
             text-align: center;
-            background-color: #FBC9CF; /* Light red background for the main container */
+            background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
         }
 
         h1 {
-            color: #D71C2B; /* Red color for the main heading */
+            color: #401664; /* NatWest purple for the main heading */
             margin-bottom: 20px;
         }
 
         p {
             font-size: 1.2em;
-            color: #FFFCF9; /* Slightly off-white color for the paragraph text */
+            color: #401664; /* NatWest purple for the paragraph text */
             margin-bottom: 20px;
         }
 
@@ -90,15 +39,15 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px;
-            border-bottom: 1px solid #F78E99; /* Light red border */
-            background-color: #FBC9CF; /* Light red background for status items */
+            border-bottom: 1px solid #401664; /* NatWest purple border */
+            background-color: white; /* White background for status items */
             border-radius: 5px;
             margin: 10px 0;
         }
 
         .status p {
             margin: 0;
-            color: #401664; /* Dark text color for status items */
+            color: #401664; /* NatWest purple for status items text */
         }
 
         .success {
@@ -113,45 +62,21 @@
             font-size: 1.5em; /* Larger font for success/failure icons */
         }
     </style>
->>>>>>> 0085cc7 (Styling for pages)
 </head>
 <body>
-    <h1>Payment Status</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Status</th>
-                <th>Message</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for result in request.session.payment_results %}
-                <tr>
-                    <td>{{ result.username }}</td>
-                    <td>
-                        {% if result.status == 'Failed' %}
-                            <span class="failed">❌</span>
-                        {% else %}
-                            <span class="success">✔️</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if result.status != 'Success' %}
-                            {{ result.message }}
-                        {% endif %}
-                    </td>
-                </tr>
+    <div class="container">
+        <h1>Processing Payments</h1>
+        <p>Please wait while we process the payments. This may take a few moments.</p>
+        <div id="statuses">
+            {% for result in results %}
+                <div class="status">
+                    <p>{{ result.username }}</p>
+                    <p class="{% if result.status == 'Success' %}success{% else %}failed{% endif %}">
+                        {% if result.status == 'Success' %}✔{% else %}✘{% endif %}
+                    </p>
+                </div>
             {% endfor %}
-        </tbody>
-    </table>
-    <form action="{% url 'start_payment_process' %}" method="get">
-        <button type="submit">Back to Start Payment Process</button>
-    </form>
+        </div>
+    </div>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
-
->>>>>>> 0085cc7 (Styling for pages)
