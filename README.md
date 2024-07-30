@@ -30,8 +30,8 @@ git clone https://github.com/mwkan/PayPart.git
 
 In order to run the program you will need to have the following installed:
 
-altgraph @ file:///System/Volumes/Data/SWE/Apps/DT/BuildRoots/BuildRoot11/ActiveBuildRoot/Library/Caches/com.apple.xbs/Sources/python3/python3-141/altgraph-0.17.2-py2.py3-none-any.whl
-asgiref==3.7.2
+- altgraph @ file:///System/Volumes/Data/SWE/Apps/DT/BuildRoots/BuildRoot11/ActiveBuildRoot/Library/Caches/com.apple.xbs/Sources/python3/python3-141/altgraph-0.17.2-py2.py3-none-any.whl
+- asgiref==3.7.2
 certifi==2024.7.4
 charset-normalizer==3.3.2
 Django==4.2.4
