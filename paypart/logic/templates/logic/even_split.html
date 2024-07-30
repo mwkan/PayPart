@@ -10,7 +10,7 @@
         {% csrf_token %}
         {% for form in forms %}
             <div>
-                {{ form.username.label_tag }} {{ form.username }} - £{{ amount_per_person }}
+                {{ form.username.label_tag }} {{ form.username }} : £{{ amount_per_person }}
                 {{ form.amount.as_hidden }}  <!-- Amount is hidden because it's fixed in even split -->
             </div>
         {% endfor %}

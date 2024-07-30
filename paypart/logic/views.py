@@ -46,7 +46,7 @@ def even_split(request):
     total_amount = request.session.get('total_amount')
     num_people = request.session.get('num_people')
     if total_amount and num_people:
-        amount_per_person = total_amount / num_people
+        amount_per_person = round(total_amount / num_people, 2)
         if request.method == 'POST':
             forms1 = [forms.UsernameForm(request.POST, prefix=str(i)) for i in range(num_people)]
             if all(form.is_valid() for form in forms1):
