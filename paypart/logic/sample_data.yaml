@@ -1,0 +1,476 @@
+users:
+- firstName: Dionne
+  lastName: Jefferson
+  type: business
+  username: djefferson
+  password: 1234567890
+  pin: 12345678
+  accounts:
+  - other: 50000011223301
+    otherScheme: BBAN
+    countryCode: GB
+    name: Dionne Jefferson
+    currency: GBP
+    balance: 20021.35
+    beneficiaries:
+    - other: '80540122222222'
+      otherScheme: BBAN
+      countryCode: GB
+    - uniqueReference: 'Ref2'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+      name: 'Name2'
+      agentId: 'AgentId2'
+      agentScheme: 'BICFI'
+      agentName: 'AgentName2'
+    directDebits:
+    - mandateIdentification: 'MandateId1'
+      name: 'Name1'
+    - mandateIdentification: 'MandateId2'
+      name: 'Name2'
+      status: 'Active'
+      previousExecutionDateTime: -10d
+      previousExecutionAmount: 101.12
+      previousExecutionCcy: 'GBP'
+    standingOrders:
+    - frequency: 'IntrvlWkDay:01:01'
+      nextExecutionDateTime: +1d
+      nextExecutionAmount: 26.48
+      nextExecutionCcy: 'GBP'
+      other: '80540122222222'
+      otherScheme: BBAN
+      countryCode: GB
+    - frequency: 'IntrvlMnthDay:01:10'
+      reference: 'Ref2'
+      firstExecutionDateTime: 2020-02-01T00:00:00Z
+      firstExecutionAmount: 56.45
+      firstExecutionCcy: 'GBP'
+      nextExecutionDateTime: +1d
+      nextExecutionAmount: 26.48
+      nextExecutionCcy: 'GBP'
+      finalExecutionDateTime: +1y
+      finalExecutionAmount: 78.33
+      finalExecutionCcy: 'GBP'
+      status: 'Active'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+      name: 'Account name 2'
+    scheduledPayments:
+    - dateTime: +3d
+      amount: 13.37
+      type: 'Execution'
+      ccy: 'GBP'
+      name: 'Account name 2'
+      iban: 'GB49AIBK93134999999999'
+    - dateTime: +1M
+      amount: 42
+      type: 'Arrival'
+      ccy: 'GBP'
+      name: 'Account name 1'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+    cheques:
+      - amount: 888.8
+        payeeFullName: "full name"
+        chequeSerialNumber: 123456
+      - amount: 101010.1
+        payeeFullName: "Payee's full name"
+        chequeSerialNumber: 654321
+    transactions:
+    - amount: 250.0
+      bookingDate: -7d
+      cdtDbtInd: DBIT
+      counterparty: 50000011223302
+      remittanceInf: Monthly savings
+    - amount: 72.14
+      bookingDate: -5d
+      cdtDbtInd: DBIT
+      counterparty: 80540133333333
+      remittanceInf: Pizzeria Mama Roma
+  - other: 50000011223302
+    otherScheme: BBAN
+    countryCode: GB
+    accountSubType: 'Savings'
+    name: Dionne Jefferson
+    currency: GBP
+    balance: 125430.92
+    cheques:
+      - amount: 888.8
+        payeeFullName: "full name"
+        chequeSerialNumber: 123456
+      - amount: 101010.1
+        payeeFullName: "Payee's full name"
+        chequeSerialNumber: 654321
+    transactions:
+    - amount: 250.00
+      bookingDate: -7d
+      cdtDbtInd: CRDT
+      counterparty: 50000011223301
+      remittanceInf: Monthly savings
+- firstName: James
+  lastName: Peterson
+  type: business
+  username: jpeterson
+  password: 1234567891
+  pin: 12345671
+  accounts:
+  - other: 50000011223401
+    otherScheme: BBAN
+    countryCode: GB
+    name: James Peterson
+    currency: GBP
+    balance: 5021.35
+    beneficiaries:
+    - other: '80540122222222'
+      otherScheme: BBAN
+      countryCode: GB
+    - uniqueReference: 'Ref2'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+      name: 'Name2'
+      agentId: 'AgentId2'
+      agentScheme: 'BICFI'
+      agentName: 'AgentName2'
+    directDebits:
+    - mandateIdentification: 'MandateId1'
+      name: 'Name1'
+    - mandateIdentification: 'MandateId2'
+      name: 'Name2'
+      status: 'Active'
+      previousExecutionDateTime: -10d
+      previousExecutionAmount: 101.12
+      previousExecutionCcy: 'GBP'
+    standingOrders:
+    - frequency: 'IntrvlWkDay:01:01'
+      nextExecutionDateTime: +1d
+      nextExecutionAmount: 26.48
+      nextExecutionCcy: 'GBP'
+      other: '80540122222222'
+      otherScheme: BBAN
+      countryCode: GB
+    - frequency: 'IntrvlMnthDay:01:10'
+      reference: 'Ref2'
+      firstExecutionDateTime: 2020-02-01T00:00:00Z
+      firstExecutionAmount: 56.45
+      firstExecutionCcy: 'GBP'
+      nextExecutionDateTime: +1d
+      nextExecutionAmount: 26.48
+      nextExecutionCcy: 'GBP'
+      finalExecutionDateTime: +1y
+      finalExecutionAmount: 78.33
+      finalExecutionCcy: 'GBP'
+      status: 'Active'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+      name: 'Account name 2'
+    scheduledPayments:
+    - dateTime: +3d
+      amount: 13.37
+      type: 'Execution'
+      ccy: 'GBP'
+      name: 'Account name 2'
+      iban: 'GB49AIBK93134999999999'
+    - dateTime: +1M
+      amount: 42
+      type: 'Arrival'
+      ccy: 'GBP'
+      name: 'Account name 1'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+    cheques:
+      - amount: 888.8
+        payeeFullName: "full name"
+        chequeSerialNumber: 123456
+      - amount: 101010.1
+        payeeFullName: "Payee's full name"
+        chequeSerialNumber: 654321
+    transactions:
+    - amount: 250.0
+      bookingDate: -7d
+      cdtDbtInd: DBIT
+      counterparty: 50000011223302
+      remittanceInf: Monthly savings
+    - amount: 72.14
+      bookingDate: -5d
+      cdtDbtInd: DBIT
+      counterparty: 80540133333333
+      remittanceInf: Pizzeria Mama Roma
+- firstName: Alice
+  lastName: Smith
+  type: business
+  username: alicesmith
+  password: 1234567893
+  pin: 12345677
+  accounts:
+  - other: 50000011223777
+    otherScheme: BBAN
+    countryCode: GB
+    name: Alice Smith
+    currency: GBP
+    balance: 4021.35
+    beneficiaries:
+    - other: '80540122222222'
+      otherScheme: BBAN
+      countryCode: GB
+    - uniqueReference: 'Ref2'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+      name: 'Name2'
+      agentId: 'AgentId2'
+      agentScheme: 'BICFI'
+      agentName: 'AgentName2'
+    directDebits:
+    - mandateIdentification: 'MandateId1'
+      name: 'Name1'
+    - mandateIdentification: 'MandateId2'
+      name: 'Name2'
+      status: 'Active'
+      previousExecutionDateTime: -10d
+      previousExecutionAmount: 101.12
+      previousExecutionCcy: 'GBP'
+    standingOrders:
+    - frequency: 'IntrvlWkDay:01:01'
+      nextExecutionDateTime: +1d
+      nextExecutionAmount: 26.48
+      nextExecutionCcy: 'GBP'
+      other: '80540122222222'
+      otherScheme: BBAN
+      countryCode: GB
+    - frequency: 'IntrvlMnthDay:01:10'
+      reference: 'Ref2'
+      firstExecutionDateTime: 2020-02-01T00:00:00Z
+      firstExecutionAmount: 56.45
+      firstExecutionCcy: 'GBP'
+      nextExecutionDateTime: +1d
+      nextExecutionAmount: 26.48
+      nextExecutionCcy: 'GBP'
+      finalExecutionDateTime: +1y
+      finalExecutionAmount: 78.33
+      finalExecutionCcy: 'GBP'
+      status: 'Active'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+      name: 'Account name 2'
+    scheduledPayments:
+    - dateTime: +3d
+      amount: 13.37
+      type: 'Execution'
+      ccy: 'GBP'
+      name: 'Account name 2'
+      iban: 'GB49AIBK93134999999999'
+    - dateTime: +1M
+      amount: 42
+      type: 'Arrival'
+      ccy: 'GBP'
+      name: 'Account name 1'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+    cheques:
+      - amount: 888.8
+        payeeFullName: "full name"
+        chequeSerialNumber: 123456
+      - amount: 101010.1
+        payeeFullName: "Payee's full name"
+        chequeSerialNumber: 654321
+    transactions:
+    - amount: 250.0
+      bookingDate: -7d
+      cdtDbtInd: DBIT
+      counterparty: 50000011223302
+      remittanceInf: Monthly savings
+    - amount: 72.14
+      bookingDate: -5d
+      cdtDbtInd: DBIT
+      counterparty: 80540133333333
+      remittanceInf: Pizzeria Mama Roma
+- firstName: Alan
+  lastName: Arnold
+  type: business
+  username: alanarnold
+  password: 1234563390
+  pin: 12345666
+  accounts:
+  - other: 50000011246245
+    otherScheme: BBAN
+    countryCode: GB
+    name: Alan Arnold
+    currency: GBP
+    balance: 20021.35
+    beneficiaries:
+    - other: '80540122222222'
+      otherScheme: BBAN
+      countryCode: GB
+    - uniqueReference: 'Ref2'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+      name: 'Name2'
+      agentId: 'AgentId2'
+      agentScheme: 'BICFI'
+      agentName: 'AgentName2'
+    directDebits:
+    - mandateIdentification: 'MandateId1'
+      name: 'Name1'
+    - mandateIdentification: 'MandateId2'
+      name: 'Name2'
+      status: 'Active'
+      previousExecutionDateTime: -10d
+      previousExecutionAmount: 101.12
+      previousExecutionCcy: 'GBP'
+    standingOrders:
+    - frequency: 'IntrvlWkDay:01:01'
+      nextExecutionDateTime: +1d
+      nextExecutionAmount: 26.48
+      nextExecutionCcy: 'GBP'
+      other: '80540122222222'
+      otherScheme: BBAN
+      countryCode: GB
+    - frequency: 'IntrvlMnthDay:01:10'
+      reference: 'Ref2'
+      firstExecutionDateTime: 2020-02-01T00:00:00Z
+      firstExecutionAmount: 56.45
+      firstExecutionCcy: 'GBP'
+      nextExecutionDateTime: +1d
+      nextExecutionAmount: 26.48
+      nextExecutionCcy: 'GBP'
+      finalExecutionDateTime: +1y
+      finalExecutionAmount: 78.33
+      finalExecutionCcy: 'GBP'
+      status: 'Active'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+      name: 'Account name 2'
+    scheduledPayments:
+    - dateTime: +3d
+      amount: 13.37
+      type: 'Execution'
+      ccy: 'GBP'
+      name: 'Account name 2'
+      iban: 'GB49AIBK93134999999999'
+    - dateTime: +1M
+      amount: 42
+      type: 'Arrival'
+      ccy: 'GBP'
+      name: 'Account name 1'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+    cheques:
+      - amount: 888.8
+        payeeFullName: "full name"
+        chequeSerialNumber: 123456
+      - amount: 101010.1
+        payeeFullName: "Payee's full name"
+        chequeSerialNumber: 654321
+    transactions:
+    - amount: 250.0
+      bookingDate: -7d
+      cdtDbtInd: DBIT
+      counterparty: 50000011223302
+      remittanceInf: Monthly savings
+    - amount: 72.14
+      bookingDate: -5d
+      cdtDbtInd: DBIT
+      counterparty: 80540133333333
+      remittanceInf: Pizzeria Mama Roma
+- firstName: Louise
+  lastName: Smith
+  type: business
+  username: louisesmith
+  password: 1344567890
+  pin: 12385678
+  accounts:
+  - other: 50000012132301
+    otherScheme: BBAN
+    countryCode: GB
+    name: Louise Smith
+    currency: GBP
+    balance: 20021.35
+    beneficiaries:
+    - other: '80540122222222'
+      otherScheme: BBAN
+      countryCode: GB
+    - uniqueReference: 'Ref2'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+      name: 'Name2'
+      agentId: 'AgentId2'
+      agentScheme: 'BICFI'
+      agentName: 'AgentName2'
+    directDebits:
+    - mandateIdentification: 'MandateId1'
+      name: 'Name1'
+    - mandateIdentification: 'MandateId2'
+      name: 'Name2'
+      status: 'Active'
+      previousExecutionDateTime: -10d
+      previousExecutionAmount: 101.12
+      previousExecutionCcy: 'GBP'
+    standingOrders:
+    - frequency: 'IntrvlWkDay:01:01'
+      nextExecutionDateTime: +1d
+      nextExecutionAmount: 26.48
+      nextExecutionCcy: 'GBP'
+      other: '80540122222222'
+      otherScheme: BBAN
+      countryCode: GB
+    - frequency: 'IntrvlMnthDay:01:10'
+      reference: 'Ref2'
+      firstExecutionDateTime: 2020-02-01T00:00:00Z
+      firstExecutionAmount: 56.45
+      firstExecutionCcy: 'GBP'
+      nextExecutionDateTime: +1d
+      nextExecutionAmount: 26.48
+      nextExecutionCcy: 'GBP'
+      finalExecutionDateTime: +1y
+      finalExecutionAmount: 78.33
+      finalExecutionCcy: 'GBP'
+      status: 'Active'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+      name: 'Account name 2'
+    scheduledPayments:
+    - dateTime: +3d
+      amount: 13.37
+      type: 'Execution'
+      ccy: 'GBP'
+      name: 'Account name 2'
+      iban: 'GB49AIBK93134999999999'
+    - dateTime: +1M
+      amount: 42
+      type: 'Arrival'
+      ccy: 'GBP'
+      name: 'Account name 1'
+      other: '93134999999999'
+      otherScheme: BBAN
+      countryCode: GB
+    cheques:
+      - amount: 888.8
+        payeeFullName: "full name"
+        chequeSerialNumber: 123456
+      - amount: 101010.1
+        payeeFullName: "Payee's full name"
+        chequeSerialNumber: 654321
+    transactions:
+    - amount: 250.0
+      bookingDate: -7d
+      cdtDbtInd: DBIT
+      counterparty: 50000011223302
+      remittanceInf: Monthly savings
+    - amount: 72.14
+      bookingDate: -5d
+      cdtDbtInd: DBIT
+      counterparty: 80540133333333
+      remittanceInf: Pizzeria Mama Roma

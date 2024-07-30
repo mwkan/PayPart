@@ -8,7 +8,6 @@ issuer = "https://api.sandbox.natwest.com"
 authorization_endpoint = "https://api.sandbox.natwest.com/authorize"
 token_endpoint = "https://ob.sandbox.natwest.com/token"
 VRP_consent_endpoint = "https://ob.sandbox.natwest.com/open-banking/v3.1/pisp/domestic-vrp-consents"
-jwks_uri = "https://keystore.openbankingtest.org.uk/0015800000jfwxXAAQ/0015800000jfwxXAAQ.jwks"
 registration_endpoint = "https://ob.sandbox.natwest.com/register"
 payment_endpoint = "https://ob.sandbox.natwest.com/open-banking/v3.1/pisp/domestic-vrps"
 
@@ -80,7 +79,7 @@ def VRP_consent(amount_to_pay_per_user, access_token):
 # 3. redirect customer to approve a VRP consent
 # need to add in step here to get account information
 def get_consent(authorization, consent_id, username):
-    account_number = "50000011223301"
+    account_number = "50000012132301"
 
     url = "https://api.sandbox.natwest.com/authorize?" \
           "client_id={}&" \
@@ -202,7 +201,7 @@ def submit_payment(access_token, consent_id, amount):
 
 # #making the calls
 #
-# ## need to get access token for each payment
+## need to get access token for each payment
 # access_token_call = get_access_token(scope="payments")
 # access_token = access_token_call.json()['access_token'] ## access token that is passed through next function
 # api_status = access_token_call.status_code ##this will give output 200 if successful
@@ -214,7 +213,7 @@ def submit_payment(access_token, consent_id, amount):
 #
 #
 # ## get customer authorisation, hard coded username until I can update the test data
-# approve = get_consent(authorization="APPROVED", consent_id=consent_id, username="djefferson@hackathon-team.2024.co.uk")
+# approve = get_consent(authorization="APPROVED", consent_id=consent_id, username="louisesmith@hackathon-team.2024.co.uk")
 # redirecturi_response = approve.json()['redirectUri']
 # get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
 # consent_code = get_code.group(1)
