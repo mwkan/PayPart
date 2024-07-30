@@ -71,7 +71,7 @@ def custom_split(request):
         forms2 = [forms.UsernameForm(request.POST, prefix=str(i)) for i in range(num_people)]
         if all(form.is_valid() for form in forms2):
             usernames = [form.cleaned_data['username'] for form in forms2]
-            amounts = [form.cleaned_data['amount'] for form in forms2]
+            amounts = [float(form.cleaned_data['amount']) for form in forms2]
             request.session['usernames'] = usernames
             request.session['amounts'] = amounts
             # Process usernames and custom amounts
