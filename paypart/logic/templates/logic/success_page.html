@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Split</title>
+    <title>Payment Success</title>
+    {% load static %}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,68 +12,46 @@
             padding: 0;
             background-color: white; /* NatWest white background for the entire page */
             color: #401664; /* NatWest purple text color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px; /* Limit the width of the container */
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 150px; /* Adjust size as needed */
+            margin: 0 auto 20px auto; /* Center the logo and add margin */
         }
 
         h1 {
-            text-align: center;
             color: #401664; /* NatWest purple for the heading */
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
-        form {
-            background-color: white; /* NatWest white background for the form */
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 600px; /* Center the form */
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
-        }
-
-        div {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #401664; /* NatWest purple for labels */
-        }
-
-        input {
-            padding: 10px;
-            border: 1px solid #401664; /* NatWest purple border for inputs */
-            border-radius: 5px;
-            width: calc(100% - 22px); /* Full width minus padding and border */
-            box-sizing: border-box; /* Include padding and border in element's total width and height */
-            margin-bottom: 10px;
-        }
-
-        button {
-            background-color: #401664; /* NatWest purple background for the button */
-            color: white; /* White text for the button */
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        button:hover {
-            background-color: #301254; /* Darker purple color on hover */
+        p {
+            font-size: 1.2em;
+            color: #401664; /* NatWest purple for the paragraph text */
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Custom Split</h1>
-    <form method="post">
-        {% csrf_token %}
-        {% for form in forms %}
-            <div>
-                {{ form.username.label_tag }} {{ form.username }}
-                {{ form.amount.label_tag }} {{ form.amount }}
-            </div>
-        {% endfor %}
-        <button type="submit">Submit</button>
-    </form>
+    <div class="container">
+        <!-- Add logo here -->
+        <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
+
+        <h1>Payment Successful</h1>
+        <p>Thank you! Your payment has been processed successfully.</p>
+    </div>
 </body>
 </html>
