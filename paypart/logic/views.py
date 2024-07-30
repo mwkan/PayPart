@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from . import forms
 from .api import get_access_token, VRP_consent, get_consent, exchange_code_for_token, confirm_funds, submit_payment
 import re
+import time
 # from django.core.cache import cache
 # from time import sleep
 
@@ -49,6 +50,10 @@ def even_split(request):
             forms1 = [forms.UsernameForm(request.POST, prefix=str(i)) for i in range(num_people)]
             if all(form.is_valid() for form in forms1):
                 usernames = [form.cleaned_data['username'] for form in forms1]
+                amounts = [amount_per_person] * num_people
+                #save to session
+                request.session['usernames'] = usernames
+                request.session['amounts'] = amounts
                 return redirect('process_payments')
         else:
             forms1 = [forms.UsernameForm(prefix=str(i)) for i in range(num_people)]
@@ -66,6 +71,8 @@ def custom_split(request):
         if all(form.is_valid() for form in forms2):
             usernames = [form.cleaned_data['username'] for form in forms2]
             amounts = [form.cleaned_data['amount'] for form in forms2]
+            request.session['usernames'] = usernames
+            request.session['amounts'] = amounts
             # Process usernames and custom amounts
             return redirect('process_payments')  # Or the next step
     else:
@@ -117,22 +124,31 @@ if __name__ == "__main__":
 
 
 def holding_page(request):
-    usernames = request.session.get('usernames', [])
-    amounts = request.session.get('amounts', [])
-    results = process_payments(usernames, amounts)
-    request.session['results'] = results
+    results = request.session.get('payment_results', [])
+    if request.method == 'POST':
+        time.sleep(300)
+        return redirect('start_payment_process')
     return render(request, 'logic/holding_page.html', {'results': results})
+    #
+    # usernames = request.session.get('usernames', [])
+    # amounts = request.session.get('amounts', [])
+    # results = process_payments(usernames, amounts)
+    # request.session['results'] = results
+    # return render(request, 'logic/holding_page.html', {'results': results})
 
 
 def success_page(request):
-    return render(request, 'logic/success_page.html')
+    results = request.session.get('payment_results', [])
+    return render(request, 'logic/success_page.html', {'results': results})
 
 
 def process_payments(request):
     # usernames = ['user1', 'user2', 'user3']
     # amounts = [50.0, 75.0, 100.0]
     usernames = request.session.get('usernames', [])
+    print(usernames)
     amounts = request.session.get('amounts', [])
+    print(amounts)
 
     results = []
     for username, amount in zip(usernames, amounts):
@@ -183,7 +199,10 @@ def process_payments(request):
 
         results.append(user_result)
 
-    return results
+    request.session['payment_results'] = results
+    if any(result['status'] == 'Failed' for result in results):
+        return redirect('holding_page')
+    return redirect('success_page')
 
 
 
