@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Even Split</title>
+    {% load static %}
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: white; /* NatWest purple background for the entire page */
-            color: #401664; /* Default text color */
+            background-color: white; /* NatWest white background for the entire page */
+            color: #401664; /* NatWest purple for the text */
             margin: 0;
             padding: 0;
             display: flex;
@@ -18,30 +19,40 @@
         }
 
         .container {
-            background-color: white; /* Light red background for the container */
+            background-color: white; /* White background for the container */
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
             width: 80%;
             max-width: 600px; /* Limit width for larger screens */
             text-align: center;
         }
 
+        .logo {
+            max-width: 150px; /* Adjust size as needed */
+            margin: 0 auto 20px auto; /* Center the logo and add margin */
+        }
+
         h1 {
-            color: #401664; /* Red color for the heading */
+            color: #401664; /* NatWest purple for the heading */
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #401664; /* NatWest purple for subheading */
             margin-bottom: 20px;
         }
 
         p {
             font-size: 18px;
-            color: #401664; /* Dark purple color for the text */
+            color: #401664; /* NatWest purple for the text */
             margin-bottom: 20px;
         }
 
         form {
-            background-color: white; /* Same background color for the form */
+            background-color: white; /* White background for the form */
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
         }
 
@@ -51,28 +62,35 @@
         }
 
         label {
-            color: #401664; /* Dark purple color for labels */
+            color: #401664; /* NatWest purple for labels */
         }
 
         button {
-            background-color: white; /* Red color for button background */
-            color: #401664;
+            background-color: white; /* White background for button */
+            color: #401664; /* NatWest purple for button text */
             padding: 10px 20px;
-            border: none;
+            border: 1px solid #401664; /* NatWest purple border for button */
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            display: block; /* Ensure button takes up space */
+            width: 100%; /* Full width button */
         }
 
         button:hover {
-            background-color: #401664; /* Darker red color on hover */
+            background-color: #401664; /* NatWest purple background on hover */
+            color: white; /* White text on hover */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Even Split</h1>
-        <p>Each person should pay: £{{ amount_per_person }}</p>
+        <!-- Add logo here -->
+        <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
+
+        <h1>Splitting Evenly</h1>
+        <h3>Each person should pay: £{{ amount_per_person }}</h3>
+        <p>Enter each person's NatWest Username</p>
         <form method="post">
             {% csrf_token %}
             {% for form in forms %}

@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Start Payment Process</title>
+    {% load static %}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -9,25 +12,43 @@
             padding: 0;
             background-color: white;  /* NatWest white background for the entire page */
             color: #401664; /* NatWest purple for the text */
+            display: flex;
+            justify-content: center; /* Center container horizontally */
+            align-items: center; /* Center container vertically */
+            height: 100vh; /* Full viewport height */
+        }
+
+        .container {
+            background-color: white;  /* White background for the form container */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for the container */
+            max-width: 600px; /* Set a maximum width for the container */
+            width: 100%; /* Ensure container takes full width within max-width */
+            box-sizing: border-box; /* Include padding in width calculation */
+            text-align: left; /* Left-align text in container */
+        }
+
+        h1, p {
+            text-align: center; /* Center-align the heading and paragraph */
+            color: #401664; /* NatWest purple for text */
+            margin: 0;
         }
 
         h1 {
-            text-align: center;
-            color: #401664; /* NatWest purple for the header */
-            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 2em; /* Adjust size as needed */
         }
 
         p {
-            text-align: center;
             font-size: 1.2em;
-            color: #401664; /* NatWest purple for the paragraph text */
+            margin-bottom: 20px;
         }
 
         .messages {
             list-style-type: none;
             padding: 0;
-            margin: 20px auto;
-            max-width: 600px; /* Center the message list */
+            margin-bottom: 20px;
         }
 
         .messages li {
@@ -43,8 +64,6 @@
         form {
             background-color: white;  /* White background for the form */
             padding: 20px;
-            margin: 20px auto;
-            max-width: 600px; /* Center the form */
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for the form */
         }
@@ -52,6 +71,7 @@
         h2 {
             color: #401664; /* NatWest purple for form headers */
             margin-bottom: 10px;
+            text-align: left; /* Left-align form headers */
         }
 
         button {
@@ -63,35 +83,71 @@
             cursor: pointer;
             font-size: 1em;
             margin-top: 10px;
+            display: block; /* Ensure button takes up space */
+            width: 100%; /* Full width button */
         }
 
         button:hover {
             background-color: #401664; /* NatWest purple background on hover */
             color: white; /* White text on hover */
         }
+
+        .form-group {
+            margin-bottom: 15px; /* Add margin to space out form fields */
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #401664; /* NatWest purple for labels */
+            text-align: left; /* Left-align labels */
+        }
+
+        .form-group input, .form-group select {
+            width: 100%; /* Ensure form inputs and selects take full width */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        .logo {
+            display: block;
+            max-width: 150px; /* Adjust size as needed */
+            margin: 0 auto 20px auto; /* Center the logo and add margin */
+        }
     </style>
 </head>
 <body>
-    <h1>Start Payment Process</h1>
-    <p>Total Amount to be paid: £{{ 2000 }}</p>
+    <div class="container">
+        <!-- Add logo here -->
+        <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
 
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+        <h1>Start Payment Process</h1>
+        <p>Total Amount to be paid: £{{ 2000 }}</p>
 
-    <form method="post">
-        {% csrf_token %}
-        <h2>Split Form</h2>
-        {{ split_form.as_p }}
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-        <h2>Choose Split Type</h2>
-        {{ split_choice_form.as_p }}
+        <form method="post">
+            {% csrf_token %}
 
-        <button type="submit">Submit</button>
-    </form>
+            <div class="form-group">
+                {{ split_form.as_p }}
+            </div>
+
+            <div class="form-group">
+                <h2>How would you like to split the bill?</h2>
+                {{ split_choice_form.as_p }}
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
