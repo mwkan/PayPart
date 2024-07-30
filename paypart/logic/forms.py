@@ -10,7 +10,7 @@ class SplitChoiceForm(forms.Form):
         ('even', 'Split Evenly'),
         ('custom', 'Split by Custom Amount'),
     ]
-    split_type = forms.ChoiceField(choices=SPLIT_CHOICES, widget=forms.RadioSelect)
+    split_type = forms.ChoiceField(choices=SPLIT_CHOICES, widget=forms.RadioSelect, label='')
 
 
 class UsernameForm(forms.Form):

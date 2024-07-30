@@ -104,35 +104,26 @@
         }
 
         .form-group input, .form-group select {
-            width: 100%; /* Ensure form inputs and selects take full width */
+            width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            box-sizing: border-box; /* Include padding in width calculation */
+            box-sizing: border-box;
         }
 
         .logo {
             display: block;
-            max-width: 150px; /* Adjust size as needed */
-            margin: 0 auto 20px auto; /* Center the logo and add margin */
+            max-width: 150px;
+            margin: 0 auto 20px auto;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Add logo here -->
         <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
 
         <h1>Start Payment Process</h1>
         <p>Total Amount to be paid: £{{ 2000 }}</p>
-
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
 
         <form method="post">
             {% csrf_token %}

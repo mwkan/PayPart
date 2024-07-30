@@ -8,8 +8,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: white; /* NatWest white background for the entire page */
-            color: #401664; /* NatWest purple for the text */
+            background-color: white;
+            color: #401664;
             margin: 0;
             padding: 0;
             display: flex;
@@ -19,87 +19,87 @@
         }
 
         .container {
-            background-color: white; /* White background for the container */
+            background-color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 80%;
-            max-width: 600px; /* Limit width for larger screens */
+            max-width: 600px;
             text-align: center;
-            position: relative; /* For positioning the back button */
+            position: relative;
         }
 
         .logo {
-            max-width: 150px; /* Adjust size as needed */
-            margin: 0 auto 20px auto; /* Center the logo and add margin */
+            max-width: 150px;
+            margin: 0 auto 20px auto;
         }
 
         h1 {
-            color: #401664; /* NatWest purple for the heading */
+            color: #401664;
             margin-bottom: 20px;
         }
 
         h3 {
-            color: #401664; /* NatWest purple for subheading */
+            color: #401664;
             margin-bottom: 20px;
         }
 
         p {
             font-size: 18px;
-            color: #401664; /* NatWest purple for the text */
+            color: #401664;
             margin-bottom: 20px;
         }
 
         form {
-            background-color: white; /* White background for the form */
+            background-color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         div {
             margin-bottom: 15px;
-            text-align: left; /* Align text to the left for better readability */
+            text-align: left;
         }
 
         label {
-            color: #401664; /* NatWest purple for labels */
+            color: #401664;
         }
 
         button, .back-button {
-            background-color: white; /* White background for button */
-            color: #401664; /* NatWest purple for button text */
+            background-color: white;
+            color: #401664;
             padding: 10px 20px;
-            border: 1px solid #401664; /* NatWest purple border for button */
+            border: 1px solid #401664;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            display: block; /* Ensure button takes up space */
-            width: 100%; /* Full width button */
-            text-decoration: none; /* Remove underline from link */
-            text-align: center; /* Center the text */
+            display: block;
+            width: 100%;
+            text-decoration: none;
+            text-align: center;
         }
 
         button:hover, .back-button:hover {
-            background-color: #401664; /* NatWest purple background on hover */
-            color: white; /* White text on hover */
+            background-color: #401664;
+            color: white;
         }
 
         .back-button {
             position: absolute;
             top: 20px;
             left: 20px;
-            width: auto; /* Auto width for back button */
-            display: inline-block; /* Inline block to fit content */
+            width: auto;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Back button -->
+
         <a href="{% url 'start_payment_process' %}" class="back-button">Back</a>
 
-        <!-- Add logo here -->
+
         <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
 
         <h1>Splitting Evenly</h1>
