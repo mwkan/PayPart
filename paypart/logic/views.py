@@ -143,8 +143,14 @@ def success_page(request):
     return render(request, 'logic/success_page.html', {'results': results})
 
 def check_funds_no_payment(usernames, amounts, request):
+    # usernames = ['user1', 'user2', 'user3']
+    # amounts = [50.0, 75.0, 100.0]
+    # usernames = request.session.get('usernames', [])
+    print(usernames)
+    # amounts = request.session.get('amounts', [])
+    print(amounts)
+
     results = []
-    funds_available = []
     for username, amount in zip(usernames, amounts):
         user_result = {'username': username, 'status': 'Pending'}
 
@@ -179,18 +185,19 @@ def check_funds_no_payment(usernames, amounts, request):
             continue
 
         confirm_funds_call = confirm_funds(access_token=new_access_token, consent_id=consent_id, amount=amount)
-        funds_status = confirm_funds_call.json().get('Data', {}).get(
-                'FundsAvailableResult', {}).get('FundsAvailable')
-        print("funds_status:",funds_status)
-        funds_available_list = funds_available.append(funds_status)
-        print("funds_available:", funds_available_list)
         if confirm_funds_call.status_code != 200 or confirm_funds_call.json().get('Data', {}).get(
                 'FundsAvailableResult', {}).get('FundsAvailable') != 'Available':
             user_result['status'] = 'Failed'
             results.append(user_result)
             continue
 
-        return funds_available_list
+    #stores results in the session
+    request.session['payment_results'] = results
+
+    #check for any failed payments
+    if any(result['status'] == 'Failed' for result in results):
+        return redirect('holding_page')
+    return process_payments(usernames, amounts, request)
 
 def process_payments(usernames, amounts, request):
     # usernames = ['user1', 'user2', 'user3']
@@ -267,19 +274,8 @@ def process_payments_view(request):
         messages.error(request, "Invalid entry. Please try again.")
         return redirect('start_payment_process')  # redirect to start payment
 
-    funds_available = check_funds_no_payment(usernames, amounts, request)
-    print(funds_available)
-    for status in funds_available:
-        if status == 'Available':
-            run_payment = True
-        else:
-            break
-
-    if run_payment == True:
-        payment = process_payments(usernames, amounts, request)
-
     #calls the process payments function which handles redirection based on results
-    return payment
+    return check_funds_no_payment(usernames, amounts, request)
 
 
 # # Function to process payments for an array of users
