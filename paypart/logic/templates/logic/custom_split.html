@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Split</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: #401664;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            max-width: 150px;
+            margin: 0 auto 20px auto;
+        }
+
+        h1 {
+            color: #401664;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #401664;
+            margin-bottom: 20px;
+        }
+
+        .remaining-amount {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        div {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #401664;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #401664;
+            border-radius: 5px;
+            width: calc(100% - 22px);
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        button, .back-button {
+            background-color: white;
+            color: #401664;
+            padding: 10px 20px;
+            border: 1px solid #401664;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        button:hover, .back-button:hover {
+            background-color: #401664;
+            color: white;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: auto;
+            display: inline-block;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const totalAmount = 2000;
+            const inputs = document.querySelectorAll('input[name*="amount"]');
+            const remainingAmountElement = document.getElementById('remaining-amount');
+
+            function updateRemainingAmount() {
+                let sum = 0;
+                inputs.forEach(input => {
+                    const value = parseFloat(input.value);
+                    if (!isNaN(value)) {
+                        sum += value;
+                    }
+                });
+                const remainingAmount = totalAmount - sum;
+                remainingAmountElement.textContent = `Remaining amount to allocate: £${remainingAmount.toFixed(2)}`;
+            }
+
+            inputs.forEach(input => {
+                input.addEventListener('input', updateRemainingAmount);
+            });
+
+            updateRemainingAmount();
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+
+        <a href="{% url 'start_payment_process' %}" class="back-button">Back</a>
+
+
+        <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
+
+        <h1>Split by a Custom Amount</h1>
+        <p>Enter each person's NatWest Username, followed by the custom amount you would like them to pay</p>
+        <form method="post">
+            {% csrf_token %}
+            {% for form in forms %}
+                <div>
+                    {{ form.username.label_tag }} {{ form.username }}
+                    {{ form.amount.label_tag }} {{ form.amount }}
+                </div>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+        <p id="remaining-amount" class="remaining-amount"></p>
+    </div>
+</body>
+</html>

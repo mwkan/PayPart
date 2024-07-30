@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Payments</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white; /* NatWest white background for the entire page */
+            color: #401664; /* Default text color (NatWest purple) */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 90%; /* Increase container width */
+            max-width: 800px; /* Set a new maximum width */
+            margin: 20px auto;
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+        }
+
+        .logo {
+            max-width: 150px; /* Adjust size as needed */
+            margin: 0 auto 20px auto; /* Center the logo and add margin */
+        }
+
+        h1 {
+            color: #401664; /* NatWest purple for the main heading */
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #401664; /* NatWest purple for the paragraph text */
+            margin-bottom: 20px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center; /* Align items vertically in the center */
+            padding: 10px;
+            border-bottom: 1px solid #401664; /* NatWest purple border */
+            background-color: white; /* White background for status items */
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: left; /* Align text to the left */
+        }
+
+        .status p {
+            margin: 0;
+            color: #401664; /* NatWest purple for status items text */
+        }
+
+        .status .username {
+            flex: 1; /* Take up available space */
+        }
+
+        .status .message {
+            font-size: 0.9em; /* Smaller font size for messages */
+            color: #401664; /* NatWest purple for message text */
+            margin-right: 10px; /* Space between message and status indicator */
+        }
+
+        .status .indicator {
+            font-size: 1.5em; /* Larger font for success/failure icons */
+        }
+
+        .success {
+            color: #00FF00; /* Green color for success status */
+        }
+
+        .failed {
+            color: #FF0000; /* Red color for failed status */
+        }
+
+        .try-again-button {
+            display: inline-block;
+            background-color: #401664; /* NatWest purple background for button */
+            color: white; /* White text color */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none; /* Remove underline from link */
+            margin-top: 20px;
+        }
+
+        .try-again-button:hover {
+            background-color: #2e1c51; /* Darker purple for hover effect */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Add logo here -->
+        <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
+
+        <h1>Payment Failed</h1>
+        <p>Please review the results below:</p>
+
+        <!-- Display results -->
+        <div id="statuses">
+            {% for result in results %}
+                <div class="status">
+                    <!-- Username first -->
+                    <p class="username">{{ result.username }}</p>
+                    <!-- Message -->
+                    {% if result.message %}
+                        <p class="message">{{ result.message }}</p>
+                    {% endif %}
+                    <!-- Success/Failure indicator -->
+                    <p class="indicator {% if result.status == 'Success' %}success{% else %}failed{% endif %}">
+                        {% if result.status == 'Success' %}✔{% else %}✘{% endif %}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- "Try Again" button -->
+        <a href="{% url 'start_payment_process' %}" class="try-again-button">Try Again</a>
+    </div>
+</body>
+</html>

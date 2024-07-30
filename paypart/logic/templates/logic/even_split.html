@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Even Split</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            color: #401664;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            max-width: 150px;
+            margin: 0 auto 20px auto;
+        }
+
+        h1 {
+            color: #401664;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #401664;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #401664;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        div {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            color: #401664;
+        }
+
+        button, .back-button {
+            background-color: white;
+            color: #401664;
+            padding: 10px 20px;
+            border: 1px solid #401664;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        button:hover, .back-button:hover {
+            background-color: #401664;
+            color: white;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: auto;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <a href="{% url 'start_payment_process' %}" class="back-button">Back</a>
+
+
+        <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
+
+        <h1>Splitting Evenly</h1>
+        <h3>Each person should pay: £{{ amount_per_person|floatformat:2 }}</h3>
+        <p>Enter each person's NatWest Username</p>
+        <form method="post">
+            {% csrf_token %}
+            {% for form in forms %}
+                <div>
+                    {{ form.username.label_tag }} {{ form.username }} : £{{ amount_per_person|floatformat:2 }}
+                    {{ form.amount.as_hidden }}
+                </div>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white; /* NatWest white background for the entire page */
+            color: #401664; /* NatWest purple text color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px; /* Limit the width of the container */
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 150px; /* Adjust size as needed */
+            margin: 0 auto 20px auto; /* Center the logo and add margin */
+        }
+
+        h1 {
+            color: #401664; /* NatWest purple for the heading */
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #401664; /* NatWest purple for the paragraph text */
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Add logo here -->
+        <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
+
+        <h1>Payment Successful</h1>
+        <p>Thank you! Your payment has been processed successfully.</p>
+    </div>
+</body>
+</html>

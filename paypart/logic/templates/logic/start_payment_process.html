@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Payment Process</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;  /* NatWest white background for the entire page */
+            color: #401664; /* NatWest purple for the text */
+            display: flex;
+            justify-content: center; /* Center container horizontally */
+            align-items: center; /* Center container vertically */
+            height: 100vh; /* Full viewport height */
+        }
+
+        .container {
+            background-color: white;  /* White background for the form container */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for the container */
+            max-width: 600px; /* Set a maximum width for the container */
+            width: 100%; /* Ensure container takes full width within max-width */
+            box-sizing: border-box; /* Include padding in width calculation */
+            text-align: left; /* Left-align text in container */
+        }
+
+        h1, p {
+            text-align: center; /* Center-align the heading and paragraph */
+            color: #401664; /* NatWest purple for text */
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2em; /* Adjust size as needed */
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .messages {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .messages li {
+            color: #401664;  /* NatWest purple for messages text */
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #401664;  /* NatWest purple border for messages */
+            background-color: white;  /* White background for messages */
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+        }
+
+        form {
+            background-color: white;  /* White background for the form */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for the form */
+        }
+
+        h2 {
+            color: #401664; /* NatWest purple for form headers */
+            margin-bottom: 10px;
+            text-align: left; /* Left-align form headers */
+        }
+
+        button {
+            background-color: white; /* White background for button */
+            color: #401664; /* NatWest purple for button text */
+            padding: 10px 20px;
+            border: 1px solid #401664; /* NatWest purple border for button */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            display: block; /* Ensure button takes up space */
+            width: 100%; /* Full width button */
+        }
+
+        button:hover {
+            background-color: #401664; /* NatWest purple background on hover */
+            color: white; /* White text on hover */
+        }
+
+        .form-group {
+            margin-bottom: 15px; /* Add margin to space out form fields */
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #401664; /* NatWest purple for labels */
+            text-align: left; /* Left-align labels */
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            display: block;
+            max-width: 150px;
+            margin: 0 auto 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{% static 'Logo.png' %}" alt="Logo" class="logo">
+
+        <h1>Start Payment Process</h1>
+        <p>Total Amount to be paid: £{{ 2000 }}</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                {{ split_form.as_p }}
+            </div>
+
+            <div class="form-group">
+                <h2>How would you like to split the bill?</h2>
+                {{ split_choice_form.as_p }}
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
