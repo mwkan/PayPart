@@ -1,9 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Even Split</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #401664; /* NatWest purple background for the entire page */
+            color: white; /* Default text color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #FBC9CF; /* Light red background for the container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+            width: 80%;
+            max-width: 600px; /* Limit width for larger screens */
+            text-align: center;
+        }
+
+        h1 {
+            color: #D71C2B; /* Red color for the heading */
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #401664; /* Dark purple color for the text */
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: #FBC9CF; /* Same background color for the form */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+        }
+
+        div {
+            margin-bottom: 15px;
+            text-align: left; /* Align text to the left for better readability */
+        }
+
+        label {
+            color: #401664; /* Dark purple color for labels */
+        }
+
+        button {
+            background-color: #D71C2B; /* Red color for button background */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #EE2033; /* Darker red color on hover */
+        }
+    </style>
 </head>
 <body>
+<<<<<<< HEAD
     <h1>Even Split</h1>
     <p>Each person should pay: £{{ amount_per_person }}</p>
     <form method="post">
@@ -16,5 +83,21 @@
         {% endfor %}
         <button type="submit">Submit</button>
     </form>
+=======
+    <div class="container">
+        <h1>Even Split</h1>
+        <p>Each person should pay: £{{ amount_per_person }}</p>
+        <form method="post">
+            {% csrf_token %}
+            {% for form in forms %}
+                <div>
+                    {{ form.username.label_tag }} {{ form.username }} - £{{ amount_per_person }}
+                    {{ form.amount.as_hidden }}  <!-- Amount is hidden because it's fixed in even split -->
+                </div>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+>>>>>>> 0085cc7 (Styling for pages)
 </body>
 </html>
