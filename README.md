@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/mwkan/PayPart/blob/4a2126637eb83b081baecd5908070c5ca7d718f4/paypart/static/Logo.png" width="300"/>
+  <img src="https://github.com/mwkan/PayPart/blob/b53bc0356c23492a4c9ab012b291e56cb53a206e/paypart/static/Logo.png" width="300"/>
 </p>
 
 
