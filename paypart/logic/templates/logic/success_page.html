@@ -3,60 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Success</title>
+    <title>Custom Split</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: white; /* NatWest purple background for the entire page */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-            color: #401664; /* Default text color */
+            padding: 0;
+            background-color: white; /* NatWest white background for the entire page */
+            color: #401664; /* NatWest purple text color */
         }
 
-        .container {
+        h1 {
             text-align: center;
-            background: white; /* Light red background for the container */
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow for better visibility */
-        }
-
-        .container h1 {
-            color: #401664; /* Red color for the heading */
-            margin-bottom: 20px;
-        }
-
-        .container p {
-            font-size: 18px;
-            color: #401664; /* Dark purple color for the text */
-        }
-
-        .container .btn {
-            display: inline-block;
-            padding: 10px 20px;
+            color: #401664; /* NatWest purple for the heading */
             margin-top: 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: white; /* Red color for button background */
+        }
+
+        form {
+            background-color: white; /* NatWest white background for the form */
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px; /* Center the form */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+        }
+
+        div {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #401664; /* NatWest purple for labels */
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #401664; /* NatWest purple border for inputs */
+            border-radius: 5px;
+            width: calc(100% - 22px); /* Full width minus padding and border */
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #401664; /* NatWest purple background for the button */
+            color: white; /* White text for the button */
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            text-decoration: none;
             cursor: pointer;
+            font-size: 1em;
         }
 
-        .container .btn:hover {
-            background-color: white; /* Darker red color on hover */
+        button:hover {
+            background-color: #301254; /* Darker purple color on hover */
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Payment Processing Complete</h1>
-        <p>All payments have been successfully processed.</p>
-        <a href="/" class="btn">Return to Home</a>
-    </div>
+    <h1>Custom Split</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for form in forms %}
+            <div>
+                {{ form.username.label_tag }} {{ form.username }}
+                {{ form.amount.label_tag }} {{ form.amount }}
+            </div>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
+
