@@ -7,5 +7,6 @@ urlpatterns = [
     path('custom_split/', views.custom_split, name='custom_split'),
     path('holding_page', views.holding_page, name='holding_page'),
     path('success_page', views.success_page, name='success_page'),
-    # Add more paths for other views in your app here
+    path('process_payments/', views.process_payments, name='process_payments'),
+
 ]

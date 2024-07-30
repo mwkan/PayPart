@@ -1,3 +1,4 @@
+import requests
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -5,8 +6,9 @@ from django.http import HttpResponse
 from . import forms
 from .api import get_access_token, VRP_consent, get_consent, exchange_code_for_token, confirm_funds, submit_payment
 import re
-from django.core.cache import cache
-from time import sleep
+# from django.core.cache import cache
+# from time import sleep
+
 
 
 def start_payment_process(request):
@@ -71,10 +73,6 @@ def custom_split(request):
     return render(request, 'logic/custom_split.html', {'forms': forms2})
 
 
-def get_username(request):
-    return request.session.get('usernames', [])
-
-
 '''
 API Calls
 
@@ -130,7 +128,12 @@ def success_page(request):
     return render(request, 'logic/success_page.html')
 
 
-def process_payments(usernames, amounts):
+def process_payments(request):
+    # usernames = ['user1', 'user2', 'user3']
+    # amounts = [50.0, 75.0, 100.0]
+    usernames = request.session.get('usernames', [])
+    amounts = request.session.get('amounts', [])
+
     results = []
     for username, amount in zip(usernames, amounts):
         user_result = {'username': username, 'status': 'Pending'}
@@ -181,6 +184,7 @@ def process_payments(usernames, amounts):
         results.append(user_result)
 
     return results
+
 
 
 # # Function to process payments for an array of users
