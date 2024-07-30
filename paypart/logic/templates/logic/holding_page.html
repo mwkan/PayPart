@@ -59,6 +59,7 @@
             <tr>
                 <th>Username</th>
                 <th>Status</th>
+                <th>Message</th>
             </tr>
         </thead>
         <tbody>
@@ -66,10 +67,15 @@
                 <tr>
                     <td>{{ result.username }}</td>
                     <td>
-                        {% if result.status == 'Success' %}
-                            ✔️
+                        {% if result.status == 'Failed' %}
+                            <span class="failed">❌</span>
                         {% else %}
-                            ❌
+                            <span class="success">✔️</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if result.status != 'Success' %}
+                            {{ result.message }}
                         {% endif %}
                     </td>
                 </tr>

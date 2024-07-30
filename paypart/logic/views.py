@@ -130,12 +130,7 @@ def holding_page(request):
         time.sleep(300)
         return redirect('start_payment_process')
     return render(request, 'logic/holding_page.html', {'results': results})
-    #
-    # usernames = request.session.get('usernames', [])
-    # amounts = request.session.get('amounts', [])
-    # results = process_payments(usernames, amounts)
-    # request.session['results'] = results
-    # return render(request, 'logic/holding_page.html', {'results': results})
+
 
 
 def success_page(request):
@@ -143,53 +138,54 @@ def success_page(request):
     return render(request, 'logic/success_page.html', {'results': results})
 
 def check_funds_no_payment(usernames, amounts, request):
-    # usernames = ['user1', 'user2', 'user3']
-    # amounts = [50.0, 75.0, 100.0]
-    # usernames = request.session.get('usernames', [])
     print(usernames)
-    # amounts = request.session.get('amounts', [])
     print(amounts)
 
     results = []
     for username, amount in zip(usernames, amounts):
-        user_result = {'username': username, 'status': 'Pending'}
+        user_result = {'username': username, 'status': 'Pending', 'message': ''}
 
-        access_token_call = get_access_token(scope="payments")
-        access_token = access_token_call.json().get('access_token')
-        if access_token_call.status_code != 200 or not access_token:
-            user_result['status'] = 'Failed'
-            results.append(user_result)
-            continue
+        try:
+            # Obtain access token
+            access_token_call = get_access_token(scope="payments")
+            access_token_call.raise_for_status()  # raises an httperror for a bad response
+            access_token = access_token_call.json().get('access_token')
+            if access_token_call.status_code != 200 or not access_token:
+                raise ValueError('Access token not found')
 
-        consent_call = VRP_consent(access_token=access_token, amount_to_pay_per_user=amount)
-        consent_id = consent_call.json().get('Data', {}).get('ConsentId')
-        if consent_call.status_code != 201 or not consent_id:
-            user_result['status'] = 'Failed'
-            results.append(user_result)
-            continue
+            # Request VRP consent
+            consent_call = VRP_consent(access_token=access_token, amount_to_pay_per_user=amount)
+            consent_call.raise_for_status()
+            consent_id = consent_call.json().get('Data', {}).get('ConsentId')
+            if consent_call.status_code != 201 or not consent_id:
+                raise ValueError('Consent ID not found')
 
-        authorization_code = get_consent(authorization="APPROVED", consent_id=consent_id, username=username)
-        redirecturi_response = authorization_code.json().get('redirectUri')
-        get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
-        consent_code = get_code.group(1) if get_code else None
-        if authorization_code.status_code != 200 or not consent_code:
-            user_result['status'] = 'Failed'
-            results.append(user_result)
-            continue
+            # Get Consent Authorisation code
+            authorization_code = get_consent(authorization="APPROVED", consent_id=consent_id, username=username)
+            authorization_code.raise_for_status()
+            redirecturi_response = authorization_code.json().get('redirectUri')
+            get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
+            consent_code = get_code.group(1) if get_code else None
+            if authorization_code.status_code != 200 or not consent_code:
+                raise ValueError('Consent code not found in URI')
 
-        vrp_exchange = exchange_code_for_token(code=consent_code)
-        new_access_token = vrp_exchange.json().get('access_token')
-        if vrp_exchange.status_code != 200 or not new_access_token:
-            user_result['status'] = 'Failed'
-            results.append(user_result)
-            continue
+            vrp_exchange = exchange_code_for_token(code=consent_code)
+            vrp_exchange.raise_for_status()
+            new_access_token = vrp_exchange.json().get('access_token')
+            if vrp_exchange.status_code != 200 or not new_access_token:
+                raise ValueError('New Access Token not found')
 
-        confirm_funds_call = confirm_funds(access_token=new_access_token, consent_id=consent_id, amount=amount)
-        if confirm_funds_call.status_code != 200 or confirm_funds_call.json().get('Data', {}).get(
-                'FundsAvailableResult', {}).get('FundsAvailable') != 'Available':
+            confirm_funds_call = confirm_funds(access_token=new_access_token, consent_id=consent_id, amount=amount)
+            confirm_funds_call.raise_for_status()
+            if confirm_funds_call.status_code != 200 or confirm_funds_call.json().get('Data', {}).get(
+                    'FundsAvailableResult', {}).get('FundsAvailable') != 'Available':
+                raise ValueError('Funds not available')
+
+        except (requests.HTTPError, ValueError) as e:
             user_result['status'] = 'Failed'
-            results.append(user_result)
-            continue
+            user_result['message'] = str(e)
+
+        results.append(user_result)
 
     #stores results in the session
     request.session['payment_results'] = results
@@ -200,66 +196,66 @@ def check_funds_no_payment(usernames, amounts, request):
     return process_payments(usernames, amounts, request)
 
 def process_payments(usernames, amounts, request):
-    # usernames = ['user1', 'user2', 'user3']
-    # amounts = [50.0, 75.0, 100.0]
-    # usernames = request.session.get('usernames', [])
     print(usernames)
-    # amounts = request.session.get('amounts', [])
     print(amounts)
 
     results = []
     for username, amount in zip(usernames, amounts):
-        user_result = {'username': username, 'status': 'Pending'}
+        user_result = {'username': username, 'status': 'Pending', 'message': ''}
 
-        access_token_call = get_access_token(scope="payments")
-        access_token = access_token_call.json().get('access_token')
-        if access_token_call.status_code != 200 or not access_token:
-            user_result['status'] = 'Failed'
-            results.append(user_result)
-            continue
+        try:
+            # Obtain access token
+            access_token_call = get_access_token(scope="payments")
+            access_token_call.raise_for_status()  # raises an httperror for a bad response
+            access_token = access_token_call.json().get('access_token')
+            if access_token_call.status_code != 200 or not access_token:
+                raise ValueError('Access token not found')
 
-        consent_call = VRP_consent(access_token=access_token, amount_to_pay_per_user=amount)
-        consent_id = consent_call.json().get('Data', {}).get('ConsentId')
-        if consent_call.status_code != 201 or not consent_id:
-            user_result['status'] = 'Failed'
-            results.append(user_result)
-            continue
+            # Request VRP consent
+            consent_call = VRP_consent(access_token=access_token, amount_to_pay_per_user=amount)
+            consent_call.raise_for_status()
+            consent_id = consent_call.json().get('Data', {}).get('ConsentId')
+            if consent_call.status_code != 201 or not consent_id:
+                raise ValueError('Consent ID not found')
 
-        authorization_code = get_consent(authorization="APPROVED", consent_id=consent_id, username=username)
-        redirecturi_response = authorization_code.json().get('redirectUri')
-        get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
-        consent_code = get_code.group(1) if get_code else None
-        if authorization_code.status_code != 200 or not consent_code:
-            user_result['status'] = 'Failed'
-            results.append(user_result)
-            continue
+            # Get Consent Authorisation code
+            authorization_code = get_consent(authorization="APPROVED", consent_id=consent_id, username=username)
+            authorization_code.raise_for_status()
+            redirecturi_response = authorization_code.json().get('redirectUri')
+            get_code = re.search(r'code=([a-f0-9-]+)', redirecturi_response)
+            consent_code = get_code.group(1) if get_code else None
+            if authorization_code.status_code != 200 or not consent_code:
+                raise ValueError('Consent code not found in URI')
 
-        vrp_exchange = exchange_code_for_token(code=consent_code)
-        new_access_token = vrp_exchange.json().get('access_token')
-        if vrp_exchange.status_code != 200 or not new_access_token:
-            user_result['status'] = 'Failed'
-            results.append(user_result)
-            continue
+            vrp_exchange = exchange_code_for_token(code=consent_code)
+            vrp_exchange.raise_for_status()
+            new_access_token = vrp_exchange.json().get('access_token')
+            if vrp_exchange.status_code != 200 or not new_access_token:
+                raise ValueError('New Access Token not found')
 
-        confirm_funds_call = confirm_funds(access_token=new_access_token, consent_id=consent_id, amount=amount)
-        if confirm_funds_call.status_code != 200 or confirm_funds_call.json().get('Data', {}).get(
-                'FundsAvailableResult', {}).get('FundsAvailable') != 'Available':
-            user_result['status'] = 'Failed'
-            results.append(user_result)
-            continue
+            confirm_funds_call = confirm_funds(access_token=new_access_token, consent_id=consent_id, amount=amount)
+            confirm_funds_call.raise_for_status()
+            if confirm_funds_call.status_code != 200 or confirm_funds_call.json().get('Data', {}).get(
+                    'FundsAvailableResult', {}).get('FundsAvailable') != 'Available':
+                raise ValueError('Funds not available')
 
-        submit_payment_call = submit_payment(access_token=new_access_token, consent_id=consent_id, amount=amount)
-        if submit_payment_call.status_code == 201:
-            user_result['status'] = 'Success'
-        else:
+            submit_payment_call = submit_payment(access_token=new_access_token, consent_id=consent_id, amount=amount)
+            submit_payment_call.raise_for_status()
+            if submit_payment_call.status_code == 201:
+                user_result['status'] = 'Success'
+            else:
+                raise ValueError('Payment submission failed')
+
+        except (requests.HTTPError, ValueError) as e:
             user_result['status'] = 'Failed'
+            user_result['message'] = str(e)
 
         results.append(user_result)
 
-    #stores results in the session
+    # stores results in the session
     request.session['payment_results'] = results
 
-    #check for any failed payments
+    # check for any failed payments
     if any(result['status'] == 'Failed' for result in results):
         return redirect('holding_page')
     return redirect('success_page')
