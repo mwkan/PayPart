@@ -1,3 +1,4 @@
+import requests
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -72,10 +73,6 @@ def custom_split(request):
     return render(request, 'logic/custom_split.html', {'forms': forms2})
 
 
-def get_username(request):
-    return request.session.get('usernames', [])
-
-
 '''
 API Calls
 
@@ -131,9 +128,11 @@ def success_page(request):
     return render(request, 'logic/success_page.html')
 
 
-def process_payments(usernames, amounts):
+def process_payments(request):
     # usernames = ['user1', 'user2', 'user3']
     # amounts = [50.0, 75.0, 100.0]
+    usernames = request.session.get('usernames', [])
+    amounts = request.session.get('amounts', [])
 
     results = []
     for username, amount in zip(usernames, amounts):
