@@ -1,0 +1,108 @@
+/* App.css */
+
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #401664; /* Background color for all pages */
+  color: white; /* Default text color */
+}
+
+/* Header */
+header {
+  background-color: #D71C2B; /* Red background for header */
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.5em;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Container styles */
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: #FEDFE2; /* Light background for the main content */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #401664; /* Dark text color for readability */
+}
+
+/* Buttons */
+button {
+  background-color: #F78E99; /* Light red color */
+  color: white;
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+button:hover {
+  background-color: #FBC9CF; /* Slightly lighter red on hover */
+}
+
+/* Split options styles */
+.split-options {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+/* Form and input styles */
+input[type="email"], input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #F78E99; /* Input border color */
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Layout and spacing */
+h1 {
+  color: white;
+}
+
+h2 {
+  color: #EE2033; /* Red color for subheadings */
+}
+
+.back-button {
+  background: none;
+  color: #EE2033; /* Red color for back button */
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.total span {
+  font-weight: bold;
+}
+
+.approvals {
+  display: flex;
+  justify-content: space-around;
+}
+
+.approvals div {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+}
