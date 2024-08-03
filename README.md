@@ -71,3 +71,11 @@ python manage.py runserver
   To get to the app landing page, go to: http://localhost:8000/logic/start/ <br>
   If your server is running on a different port, replace 8000 with the correct port number.
 
+---
+### **The team** ##
+---
+. [Ebony Tolo](https://github.com/ephenat)
+. [Gianne Nandra](https://github.com/giannenandra)
+. [Maryam Asaria](https://github.com/MaryamA123)
+. [Mun Wei Kan](https://github.com/mwkan)
+. [Roshan Farquharson ](https://github.com/Mystyke)
