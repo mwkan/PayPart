@@ -9,7 +9,7 @@
 ----
 
 
-Introducing PayPart, the revolutionary tool that transforms the way you handle group payments. Say goodbye to the hassle of one person covering the bill and chasing friends for reimbursements. With PayPart, you can seamlessly split payments among friends at the moment of purchase, ensuring everyone pays their share instantly. Whether dining out, booking tickets, or sharing expenses, PayPart simplifies group transactions, making splitting bills easier and more convenient than ever before. Enjoy effortless, fair, and transparent payments with PayPart – where sharing costs is just a tap away.
+Introducing PayPart, the revolutionary tool that transforms the way you handle group payments. Say goodbye to the hassle of one person covering the bill and chasing friends for reimbursements. With PayPart, you can seamlessly split payments among friends at the moment of purchase, ensuring everyone pays their share instantly. Whether booking holidays, tickets, or sharing expenses, PayPart simplifies group transactions, making splitting bills easier and more convenient than ever before. Enjoy effortless, fair, and transparent payments with PayPart – where sharing costs is just a tap away.
 
 
 
